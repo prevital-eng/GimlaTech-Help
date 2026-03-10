@@ -28,6 +28,10 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
 <body class="bg-slate-50">
@@ -38,8 +42,11 @@
 
         const DATA_TREE = {
             computer: {
-                label: 'מחשב',
+                label: 'תקלה במחשב',
+                description: 'נייד, נייח או טאבלט',
                 icon: 'monitor',
+                iconBg: 'bg-orange-50',
+                iconColor: 'text-orange-500',
                 systems: {
                     windows: {
                         label: 'Windows',
@@ -62,8 +69,11 @@
                 }
             },
             phone: {
-                label: 'טלפון',
+                label: 'תקלה בטלפון',
+                description: 'אייפון או אנדרואיד',
                 icon: 'smartphone',
+                iconBg: 'bg-blue-50',
+                iconColor: 'text-blue-500',
                 systems: {
                     android: {
                         label: 'אנדרואיד',
@@ -85,7 +95,10 @@
             },
             peripherals: {
                 label: 'ציוד נוסף',
+                description: 'מדפסת, רמקולים או עכבר',
                 icon: 'printer',
+                iconBg: 'bg-purple-50',
+                iconColor: 'text-purple-500',
                 systems: {
                     printer: {
                         label: 'מדפסת',
@@ -101,7 +114,6 @@
 
         const apiKey = ""; // מפתח ה-API מסופק על ידי הסביבה
 
-        // רכיב אייקון שתמיד עובד בצורה תקינה
         const Icon = ({ name, size = 24, className = "" }) => {
             useEffect(() => {
                 if (window.lucide) {
@@ -164,51 +176,55 @@
             return (
                 <div className="min-h-screen flex flex-col max-w-md mx-auto bg-white shadow-2xl relative overflow-x-hidden">
                     {/* Header */}
-                    <header className="bg-indigo-900 text-white p-4 sticky top-0 z-50 flex items-center justify-between shadow-lg">
+                    <header className="bg-white p-4 sticky top-0 z-50 flex items-center justify-between border-b border-slate-100">
                         <div className="flex items-center gap-2 cursor-pointer" onClick={() => {setView('home'); setSelection({device:null, os:null});}}>
-                            <Icon name="cpu" size={20} className="text-indigo-300" />
-                            <h1 className="font-bold text-lg tracking-tight">GimlaTech Helper</h1>
+                            <Icon name="share-2" size={20} className="text-slate-400" onClick={(e) => { e.stopPropagation(); copyUrl(); }} />
                         </div>
-                        <div className="flex items-center gap-2">
-                            <button onClick={copyUrl} className="bg-white/10 p-2 rounded-lg text-xs font-bold">
-                                {copyStatus ? "הועתק!" : <Icon name="share-2" size={18} />}
-                            </button>
+                        <h1 className="font-bold text-2xl text-blue-600 tracking-tight">GimlaTech</h1>
+                        <div className="w-8 flex justify-end">
                             {view !== 'home' && (
-                                <button onClick={goBack} className="bg-white/10 p-2 rounded-lg">
-                                    <Icon name="chevron-left" size={20} />
+                                <button onClick={goBack} className="text-slate-400">
+                                    <Icon name="chevron-left" size={24} />
                                 </button>
                             )}
                         </div>
                     </header>
 
-                    <main className="flex-1 p-5 overflow-y-auto">
+                    <main className="flex-1 p-5 overflow-y-auto pb-32">
                         {/* מסך ראשי */}
                         {view === 'home' && (
                             <div className="space-y-6 animate-in">
-                                <div className="text-center py-4">
-                                    <h2 className="text-3xl font-bold text-slate-800 tracking-tight">שלום!</h2>
-                                    <p className="text-slate-500 font-medium tracking-tight">במה נוכל לעזור היום?</p>
+                                <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-3xl p-8 text-white shadow-lg text-center space-y-2">
+                                    <h2 className="text-2xl font-bold tracking-tight">שלום! מה הבעיה?</h2>
+                                    <p className="opacity-90 font-medium">אנחנו כאן כדי לעזור לך לתקן הכל בקלות.</p>
                                 </div>
-                                <div className="grid grid-cols-1 gap-4">
+
+                                <div className="space-y-4">
                                     {Object.entries(DATA_TREE).map(([key, val]) => (
                                         <button 
                                             key={key} 
                                             onClick={() => {setSelection({...selection, device: key}); setView('os');}}
-                                            className="bg-white p-6 rounded-3xl border-2 border-slate-100 shadow-sm flex items-center gap-5 active:scale-95 transition-all text-right"
+                                            className="w-full bg-white p-5 rounded-3xl card-shadow flex items-center justify-between active:scale-95 transition-all text-right border border-slate-50"
                                         >
-                                            <div className="p-4 bg-indigo-50 text-indigo-700 rounded-2xl">
-                                                <Icon name={val.icon} size={32} />
+                                            <div className={`${val.iconBg} p-4 rounded-2xl flex items-center justify-center`}>
+                                                <Icon name={val.icon} size={28} className={val.iconColor} />
                                             </div>
-                                            <span className="font-bold text-xl text-slate-800">{val.label}</span>
+                                            <div className="flex-1 mr-4">
+                                                <span className="block text-xl font-bold text-slate-800">{val.label}</span>
+                                                <span className="text-sm text-slate-400">{val.description}</span>
+                                            </div>
                                         </button>
                                     ))}
                                 </div>
-                                <div className="bg-indigo-800 rounded-3xl p-6 text-white shadow-xl flex items-center gap-4">
-                                    <div className="bg-white/10 p-3 rounded-full"><Icon name="camera" size={32} /></div>
+
+                                <div className="bg-indigo-50 rounded-3xl p-6 flex items-center gap-4 border border-indigo-100">
+                                    <div className="bg-white p-3 rounded-2xl shadow-sm text-indigo-600">
+                                        <Icon name="camera" size={28} />
+                                    </div>
                                     <div className="text-right flex-1">
-                                        <p className="font-bold text-sm">יש לכם צילום מסך?</p>
-                                        <p className="text-xs opacity-80 mb-2">שלחו תמונה של התקלה וננתח אותה</p>
-                                        <button onClick={() => fileInputRef.current.click()} className="bg-white text-indigo-900 w-full py-1.5 rounded-lg text-xs font-bold shadow-md">בחירת תמונה</button>
+                                        <p className="font-bold text-slate-800">יש לכם צילום מסך?</p>
+                                        <p className="text-xs text-slate-500 mb-2 font-medium">שלחו תמונה של התקלה וננתח אותה</p>
+                                        <button onClick={() => fileInputRef.current.click()} className="bg-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 transition-all">בחירת תמונה</button>
                                         <input type="file" ref={fileInputRef} className="hidden" accept="image/*" />
                                     </div>
                                 </div>
@@ -319,13 +335,31 @@
                         )}
                     </main>
 
-                    {/* Footer Tip */}
-                    <footer className="p-6 bg-slate-50 border-t">
-                        <div className="bg-amber-100 p-5 rounded-3xl border-2 border-amber-200 flex gap-4 text-sm text-amber-900 items-center justify-center italic text-center font-bold shadow-sm leading-relaxed">
-                            <Icon name="alert-circle" size={24} className="text-amber-600 flex-shrink-0" />
-                            <span>טיפ: כיבוי והדלקה מחדש של המכשיר פותרים 90% מהתקלות!</span>
-                        </div>
-                    </footer>
+                    {/* WhatsApp Support Fixed Footer */}
+                    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 w-full max-w-xs px-4">
+                        <a 
+                            href="https://wa.me/9725053960685" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="bg-white border-2 border-blue-50 p-4 rounded-3xl shadow-xl flex flex-col items-center justify-center gap-1 active:scale-95 transition-all text-center group"
+                        >
+                            <div className="flex items-center gap-2 text-slate-800 font-bold">
+                                <Icon name="phone" size={18} className="text-pink-500" />
+                                <span>צריכים עזרה אנושית?</span>
+                            </div>
+                            <span className="text-blue-600 font-extrabold text-xl tracking-wider">050-53960685</span>
+                        </a>
+                    </div>
+
+                    {/* Footer Tip (Only Home) */}
+                    {view === 'home' && (
+                        <footer className="p-6 bg-slate-50 border-t pb-32">
+                            <div className="bg-amber-100 p-5 rounded-3xl border-2 border-amber-200 flex gap-4 text-sm text-amber-900 items-center justify-center italic text-center font-bold shadow-sm leading-relaxed">
+                                <Icon name="alert-circle" size={24} className="text-amber-600 flex-shrink-0" />
+                                <span>טיפ: כיבוי והדלקה מחדש של המכשיר פותרים 90% מהתקלות!</span>
+                            </div>
+                        </footer>
+                    )}
                 </div>
             );
         }
