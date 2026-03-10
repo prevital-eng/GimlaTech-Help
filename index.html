@@ -63,7 +63,7 @@
                         icon: 'laptop',
                         iconColor: 'text-gray-700',
                         issues: [
-                            { title: 'תוכנה לא נסגרת', steps: ['⌨️ לחצו Command + Option + Escape.', '🔴 בחרו בתוכנה ולחצו "Force Quit".'] }
+                            { title: 'תוכנה לא נסגרת', steps: ['⌨️ Command + Option + Escape.', '🔴 בחרו בתוכנה ולחצו "Force Quit".'] }
                         ]
                     }
                 }
@@ -143,6 +143,12 @@
                 document.body.removeChild(textArea);
                 setCopyStatus(true);
                 setTimeout(() => setCopyStatus(false), 2000);
+            };
+
+            const handleShareToWhatsApp = (title, content) => {
+                const message = `עזרה טכנית מ-GimlaTech:\n\n*${title}*\n\n${content}\n\nנשלח מאפליקציית GimlaTech Helper`;
+                const encodedMessage = encodeURIComponent(message);
+                window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
             };
 
             const askAi = async () => {
@@ -306,6 +312,13 @@
                                             </div>
                                         ))}
                                     </div>
+                                    <button 
+                                        onClick={() => handleShareToWhatsApp(activeIssue.title, activeIssue.steps.map((s, idx) => `${idx + 1}. ${s}`).join('\n'))}
+                                        className="w-full flex items-center justify-center gap-2 bg-green-500 text-white font-bold py-3 rounded-2xl shadow-lg active:scale-95 transition-all mt-4"
+                                    >
+                                        <Icon name="share-2" size={20} />
+                                        <span>שלח הסבר בוואטסאפ</span>
+                                    </button>
                                 </div>
                                 <button onClick={() => setView('issues')} className="w-full py-4 text-slate-500 font-bold underline text-lg">חזרה לרשימה</button>
                             </div>
@@ -325,8 +338,17 @@
                                             <p className="font-bold text-slate-400 italic tracking-tight">מכין עבורכם פתרון פשוט...</p>
                                         </div>
                                     ) : (
-                                        <div className="whitespace-pre-wrap text-lg leading-relaxed text-slate-800 font-bold bg-indigo-50/50 p-6 rounded-3xl shadow-inner border border-indigo-100">
-                                            {aiResponse}
+                                        <div className="space-y-4">
+                                            <div className="whitespace-pre-wrap text-lg leading-relaxed text-slate-800 font-bold bg-indigo-50/50 p-6 rounded-3xl shadow-inner border border-indigo-100">
+                                                {aiResponse}
+                                            </div>
+                                            <button 
+                                                onClick={() => handleShareToWhatsApp("פתרון GimlaTech אישי", aiResponse)}
+                                                className="w-full flex items-center justify-center gap-2 bg-green-500 text-white font-bold py-3 rounded-2xl shadow-lg active:scale-95 transition-all"
+                                            >
+                                                <Icon name="share-2" size={20} />
+                                                <span>שלח הסבר בוואטסאפ</span>
+                                            </button>
                                         </div>
                                     )}
                                 </div>
