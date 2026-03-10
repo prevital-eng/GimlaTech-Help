@@ -2,392 +2,196 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GimlaTech Helper</title>
-    
-    <!-- קישורי ספריות יציבים עבור GitHub Pages -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7/babel.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lucide@0.400.0/dist/umd/lucide.min.js"></script>
-
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&display=swap');
-        body { 
-            font-family: 'Assistant', system-ui, -apple-system, sans-serif; 
-            background-color: #f8fafc;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
+        :root {
+            --primary: #2563eb;
+            --bg: #f1f5f9;
+            --text: #1e293b;
         }
-        .animate-in { animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        /* מסגרת האפליקציה */
+        .app-frame {
+            width: 100%;
+            max-width: 380px;
+            height: 90vh;
+            background: white;
+            border: 10px solid #1e293b;
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        .header {
+            background: #1e293b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .card:active { transform: scale(0.98); border-color: var(--primary); }
+        .card-icon { font-size: 24px; background: #eff6ff; padding: 10px; border-radius: 12px; }
+        .card-title { font-size: 18px; font-weight: bold; color: var(--text); }
         
-        /* עיצוב גלילה נקי */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .btn-back { color: var(--primary); background: none; border: none; font-weight: bold; cursor: pointer; padding: 0; text-align: right; margin-bottom: 10px; }
+        
+        .footer { padding: 15px; text-align: center; font-size: 12px; color: #94a3b8; border-top: 1px solid #f1f5f9; }
+        
+        .hidden { display: none; }
+        
+        h2 { margin: 0 0 5px 0; color: var(--text); }
+        p { margin: 0 0 20px 0; color: #64748b; font-size: 14px; }
 
-        .card-shadow {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        /* כפתור העלאת תמונה */
+        .upload-zone {
+            border: 2px dashed #cbd5e1;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            color: #64748b;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
     </style>
 </head>
-<body class="bg-slate-50">
-    <div id="root"></div>
+<body>
 
-    <script type="text/babel">
-        const { useState, useRef, useEffect } = React;
+<div class="app-frame">
+    <div class="header">
+        <span>GimlaTech Helper</span>
+        <button onclick="location.reload()" style="background:none; border:none; color:white; cursor:pointer;">🏠</button>
+    </div>
 
-        const DATA_TREE = {
-            computer: {
-                label: 'תקלה במחשב',
-                description: 'נייד, נייח או טאבלט',
-                icon: 'monitor',
-                iconBg: 'bg-orange-50',
-                iconColor: 'text-orange-500',
-                systems: {
-                    windows: {
-                        label: 'Windows',
-                        icon: 'monitor',
-                        iconColor: 'text-blue-600',
-                        issues: [
-                            { title: 'המחשב איטי מאוד', steps: ['🔄 בצעו הפעלה מחדש (Restart).', '❌ סגרו חלונות ותוכנות מיותרות.', '⚙️ בדקו עדכוני מערכת בהגדרות (Windows Update).'] },
-                            { title: 'אין אינטרנט', steps: ['🌐 ודאו שמתג ה-Wi-Fi דולק.', '🔌 נתקו את הראוטר מהחשמל ל-10 שניות וחברו שוב.', '📶 ודאו שאינכם ב-"מצב טיסה".'] },
-                            { title: 'המסך קפוא', steps: ['⌨️ לחצו יחד Ctrl + Alt + Delete.', '🔋 לחיצה ארוכה (10 שניות) על כפתור הכיבוי הפיזי.'] }
-                        ]
-                    },
-                    mac: {
-                        label: 'Mac (אפל)',
-                        icon: 'laptop',
-                        iconColor: 'text-gray-700',
-                        issues: [
-                            { title: 'תוכנה לא נסגרת', steps: ['⌨️ Command + Option + Escape.', '🔴 בחרו בתוכנה ולחצו "Force Quit".'] }
-                        ]
-                    }
-                }
-            },
-            phone: {
-                label: 'תקלה בטלפון',
-                description: 'אייפון או אנדרואיד',
-                icon: 'smartphone',
-                iconBg: 'bg-blue-50',
-                iconColor: 'text-blue-500',
-                systems: {
-                    android: {
-                        label: 'אנדרואיד',
-                        icon: 'smartphone',
-                        iconColor: 'text-green-600',
-                        issues: [
-                            { title: 'הסוללה נגמרת מהר', steps: ['☀️ הנמיכו את בהירות המסך.', '🔋 הפעילו "מצב חיסכון בסוללה" בהגדרות.'] }
-                        ]
-                    },
-                    iphone: {
-                        label: 'אייפון',
-                        icon: 'smartphone',
-                        iconColor: 'text-blue-400',
-                        issues: [
-                            { title: 'אין מקום בטלפון', steps: ['📸 מחקו תמונות כפולות.', '💬 מחקו סרטונים כבדים מהוואטסאפ.'] }
-                        ]
-                    }
-                }
-            },
-            peripherals: {
-                label: 'ציוד נוסף',
-                description: 'מדפסת, רמקולים או עכבר',
-                icon: 'printer',
-                iconBg: 'bg-purple-50',
-                iconColor: 'text-purple-500',
-                systems: {
-                    printer: {
-                        label: 'מדפסת',
-                        icon: 'printer',
-                        iconColor: 'text-orange-600',
-                        issues: [
-                            { title: 'המדפסת לא מדפיסה', steps: ['🔌 בדקו חיבור חשמל ו-USB.', '📄 ודאו שיש דפים.', '📶 ודאו שהמדפסת והמחשב על אותה רשת Wi-Fi.'] }
-                        ]
-                    }
-                }
-            }
-        };
+    <div class="content" id="app-content">
+        <div id="step-1">
+            <div class="upload-zone">📸 העלאת צילום מסך</div>
+            <h2>במה אפשר לעזור?</h2>
+            <p>בחרו את סוג המכשיר שבו יש תקלה:</p>
+            
+            <div class="card" onclick="goToStep2('pc')">
+                <span class="card-icon">💻</span>
+                <span class="card-title">מחשב</span>
+            </div>
+            <div class="card" onclick="goToStep2('phone')">
+                <span class="card-icon">📱</span>
+                <span class="card-title">טלפון</span>
+            </div>
+            <div class="card" onclick="goToStep2('extra')">
+                <span class="card-icon">🖨️</span>
+                <span class="card-title">ציוד היקפי</span>
+            </div>
+        </div>
 
-        const apiKey = ""; // מפתח ה-API מסופק על ידי הסביבה
+        <div id="step-2" class="hidden">
+            <button class="btn-back" onclick="goToStep1()">← חזרה</button>
+            <h2 id="os-title">איזו מערכת?</h2>
+            <div id="os-options"></div>
+        </div>
 
-        const Icon = ({ name, size = 24, className = "" }) => {
-            useEffect(() => {
-                if (window.lucide) {
-                    window.lucide.createIcons();
-                }
-            }, [name]);
-            return <i data-lucide={name} style={{ width: size, height: size }} className={`inline-block ${className}`}></i>;
-        };
+        <div id="step-3" class="hidden">
+            <button class="btn-back" onclick="goBackToStep2()">← חזרה</button>
+            <h2>מה הבעיה?</h2>
+            <div id="issue-options">
+                <div class="card" onclick="finish()">🌐 האינטרנט לא עובד</div>
+                <div class="card" onclick="finish()">🔌 המכשיר לא נדלק</div>
+                <div class="card" onclick="finish()">❄️ המסך קפוא</div>
+                <div class="card" onclick="finish()">⚠️ הודעת שגיאה</div>
+            </div>
+            <div style="margin-top: 20px;">
+                <label style="font-size: 13px; font-weight: bold;">או תארו במילים שלכם:</label>
+                <textarea style="width:100%; border:1px solid #ddd; border-radius:10px; margin-top:5px; padding:10px;" rows="3"></textarea>
+                <button onclick="finish()" style="width:100%; background:#2563eb; color:white; border:none; padding:12px; border-radius:10px; font-weight:bold; margin-top:10px;">בקש פתרון מה-AI</button>
+            </div>
+        </div>
+    </div>
 
-        function App() {
-            const [view, setView] = useState('home'); 
-            const [selection, setSelection] = useState({ device: null, os: null });
-            const [activeIssue, setActiveIssue] = useState(null);
-            const [userInput, setUserInput] = useState("");
-            const [isAiLoading, setIsAiLoading] = useState(false);
-            const [aiResponse, setAiResponse] = useState("");
-            const [copyStatus, setCopyStatus] = useState(false);
-            const fileInputRef = useRef(null);
+    <div class="footer">
+        © 2026 GimlaTech Helper
+    </div>
+</div>
 
-            const copyUrl = () => {
-                const url = window.location.href;
-                const textArea = document.createElement("textarea");
-                textArea.value = url;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                setCopyStatus(true);
-                setTimeout(() => setCopyStatus(false), 2000);
-            };
+<script>
+    let currentDevice = '';
 
-            const handleShareToWhatsApp = (title, content) => {
-                const message = `עזרה טכנית מ-GimlaTech:\n\n*${title}*\n\n${content}\n\nנשלח מאפליקציית GimlaTech Helper`;
-                const encodedMessage = encodeURIComponent(message);
-                window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
-            };
+    const config = {
+        pc: { label: 'מחשב', os: ['Windows (ווינדוס)', 'Mac (אפל)'] },
+        phone: { label: 'טלפון', os: ['Android (אנדרואיד)', 'iPhone (אייפון)'] },
+        extra: { label: 'ציוד היקפי', os: ['מדפסת', 'רמקולים', 'מקלדת/עכבר'] }
+    };
 
-            const askAi = async () => {
-                if (!userInput.trim()) return;
-                setIsAiLoading(true);
-                setView('ai');
-                try {
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: userInput }] }],
-                            systemInstruction: { parts: [{ text: "אתה GimlaTech Helper. עזור לאנשים מבוגרים בתקלות טכנולוגיות בעברית פשוטה. השתמש בנקודות קצרות ואימוג'ים." }] }
-                        })
-                    });
-                    const data = await response.json();
-                    setAiResponse(data.candidates?.[0]?.content?.parts?.[0]?.text || "לא נמצא פתרון כרגע.");
-                } catch (e) {
-                    setAiResponse("שגיאת חיבור. ודאו שיש לכם אינטרנט.");
-                } finally {
-                    setIsAiLoading(false);
-                }
-            };
+    function goToStep2(device) {
+        currentDevice = device;
+        document.getElementById('step-1').classList.add('hidden');
+        document.getElementById('step-2').classList.remove('hidden');
+        
+        const osTitle = document.getElementById('os-title');
+        osTitle.innerText = `איזה ${config[device].label} יש לך?`;
+        
+        const osOptions = document.getElementById('os-options');
+        osOptions.innerHTML = '';
+        config[device].os.forEach(os => {
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.innerHTML = `<span class="card-title">${os}</span>`;
+            div.onclick = () => goToStep3();
+            osOptions.appendChild(div);
+        });
+    }
 
-            const goBack = () => {
-                if (view === 'os') setView('home');
-                else if (view === 'issues') setView('os');
-                else if (view === 'solution' || view === 'ai') setView('issues');
-            };
+    function goToStep1() {
+        document.getElementById('step-2').classList.add('hidden');
+        document.getElementById('step-1').classList.remove('hidden');
+    }
 
-            return (
-                <div className="min-h-screen flex flex-col max-w-md mx-auto bg-white shadow-2xl relative overflow-x-hidden">
-                    {/* Header */}
-                    <header className="bg-white p-4 sticky top-0 z-50 flex items-center justify-between border-b border-slate-100">
-                        <div className="flex items-center gap-2 cursor-pointer" onClick={() => {setView('home'); setSelection({device:null, os:null});}}>
-                            <Icon name="share-2" size={20} className="text-slate-400" onClick={(e) => { e.stopPropagation(); copyUrl(); }} />
-                        </div>
-                        <h1 className="font-bold text-2xl text-blue-600 tracking-tight">GimlaTech</h1>
-                        <div className="w-8 flex justify-end">
-                            {view !== 'home' && (
-                                <button onClick={goBack} className="text-slate-400">
-                                    <Icon name="chevron-left" size={24} />
-                                </button>
-                            )}
-                        </div>
-                    </header>
+    function goToStep3() {
+        document.getElementById('step-2').classList.add('hidden');
+        document.getElementById('step-3').classList.remove('hidden');
+    }
 
-                    <main className="flex-1 p-5 overflow-y-auto pb-32">
-                        {/* מסך ראשי */}
-                        {view === 'home' && (
-                            <div className="space-y-6 animate-in">
-                                <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-3xl p-8 text-white shadow-lg text-center space-y-2">
-                                    <h2 className="text-2xl font-bold tracking-tight">שלום! מה הבעיה?</h2>
-                                    <p className="opacity-90 font-medium">אנחנו כאן כדי לעזור לך לתקן הכל בקלות.</p>
-                                </div>
+    function goBackToStep2() {
+        document.getElementById('step-3').classList.add('hidden');
+        document.getElementById('step-2').classList.remove('hidden');
+    }
 
-                                <div className="space-y-4">
-                                    {Object.entries(DATA_TREE).map(([key, val]) => (
-                                        <button 
-                                            key={key} 
-                                            onClick={() => {setSelection({...selection, device: key}); setView('os');}}
-                                            className="w-full bg-white p-5 rounded-3xl card-shadow flex items-center justify-between active:scale-95 transition-all text-right border border-slate-50"
-                                        >
-                                            <div className={`${val.iconBg} p-4 rounded-2xl flex items-center justify-center`}>
-                                                <Icon name={val.icon} size={28} className={val.iconColor} />
-                                            </div>
-                                            <div className="flex-1 mr-4">
-                                                <span className="block text-xl font-bold text-slate-800">{val.label}</span>
-                                                <span className="text-sm text-slate-400">{val.description}</span>
-                                            </div>
-                                        </button>
-                                    ))}
-                                </div>
+    function finish() {
+        alert("הבקשה התקבלה! סורק פתרונות...");
+        location.reload();
+    }
+</script>
 
-                                <div className="bg-indigo-50 rounded-3xl p-6 flex items-center gap-4 border border-indigo-100">
-                                    <div className="bg-white p-3 rounded-2xl shadow-sm text-indigo-600">
-                                        <Icon name="camera" size={28} />
-                                    </div>
-                                    <div className="text-right flex-1">
-                                        <p className="font-bold text-slate-800">יש לכם צילום מסך?</p>
-                                        <p className="text-xs text-slate-500 mb-2 font-medium">שלחו תמונה של התקלה וננתח אותה</p>
-                                        <button onClick={() => fileInputRef.current.click()} className="bg-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 transition-all">בחירת תמונה</button>
-                                        <input type="file" ref={fileInputRef} className="hidden" accept="image/*" />
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* בחירת מערכת הפעלה */}
-                        {view === 'os' && selection.device && (
-                            <div className="space-y-4 animate-in">
-                                <h2 className="text-xl font-bold px-1 text-slate-700 tracking-tight">איזו מערכת יש לכם?</h2>
-                                <div className="space-y-3">
-                                    {Object.entries(DATA_TREE[selection.device].systems).map(([key, val]) => (
-                                        <button 
-                                            key={key} 
-                                            onClick={() => {setSelection({...selection, os: key}); setView('issues');}}
-                                            className="w-full bg-white p-5 rounded-3xl border-2 border-slate-100 flex items-center justify-between shadow-sm active:bg-slate-50 transition-colors text-right"
-                                        >
-                                            <div className="flex items-center gap-4">
-                                                <div className="p-2 bg-slate-50 rounded-xl">
-                                                    <Icon name={val.icon} size={24} className={val.iconColor} />
-                                                </div>
-                                                <span className="font-bold text-lg text-slate-800">{val.label}</span>
-                                            </div>
-                                            <Icon name="chevron-left" size={20} className="text-slate-300" />
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* רשימת תקלות */}
-                        {view === 'issues' && selection.os && (
-                            <div className="space-y-6 animate-in">
-                                <div className="space-y-3">
-                                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">תקלות נפוצות:</h3>
-                                    {DATA_TREE[selection.device].systems[selection.os].issues.map((issue, idx) => (
-                                        <button 
-                                            key={idx} 
-                                            onClick={() => {setActiveIssue(issue); setView('solution');}}
-                                            className="w-full bg-white p-4 rounded-2xl border-2 border-slate-100 text-right font-bold shadow-sm active:bg-indigo-50"
-                                        >
-                                            {issue.title}
-                                        </button>
-                                    ))}
-                                </div>
-                                <div className="bg-slate-50 p-5 rounded-3xl border-2 border-dashed border-slate-200 space-y-3">
-                                    <p className="font-bold text-sm text-slate-700 flex items-center gap-2"><Icon name="message-square" size={16}/> הבעיה לא מופיעה? תארו אותה:</p>
-                                    <div className="relative">
-                                        <textarea 
-                                            value={userInput} 
-                                            onChange={(e) => setUserInput(e.target.value)} 
-                                            placeholder="כתבו כאן..." 
-                                            className="w-full p-4 rounded-xl border-2 border-slate-200 min-h-[100px] text-lg outline-none focus:border-indigo-500 transition-all shadow-inner"
-                                        />
-                                        <button 
-                                            onClick={askAi} 
-                                            disabled={!userInput.trim() || isAiLoading} 
-                                            className="absolute bottom-3 left-3 bg-indigo-600 text-white p-2 rounded-full shadow-lg disabled:bg-slate-300 active:scale-90 transition-all"
-                                        >
-                                            {isAiLoading ? <Icon name="refresh-cw" size={24} className="animate-spin" /> : <Icon name="send" size={24} />}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* פתרון */}
-                        {view === 'solution' && activeIssue && (
-                            <div className="space-y-6 animate-in">
-                                <div className="bg-white p-6 rounded-[2.5rem] border-t-[10px] border-green-500 shadow-2xl space-y-8">
-                                    <h2 className="text-2xl font-bold text-slate-800 leading-tight">{activeIssue.title}</h2>
-                                    <div className="space-y-4">
-                                        {activeIssue.steps.map((step, i) => (
-                                            <div key={i} className="flex gap-4 items-start p-4 bg-green-50/40 rounded-2xl border border-green-100 shadow-sm">
-                                                <div className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-md">
-                                                    {i + 1}
-                                                </div>
-                                                <p className="font-bold text-slate-700 text-lg leading-relaxed">{step}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <button 
-                                        onClick={() => handleShareToWhatsApp(activeIssue.title, activeIssue.steps.map((s, idx) => `${idx + 1}. ${s}`).join('\n'))}
-                                        className="w-full flex items-center justify-center gap-2 bg-green-500 text-white font-bold py-3 rounded-2xl shadow-lg active:scale-95 transition-all mt-4"
-                                    >
-                                        <Icon name="share-2" size={20} />
-                                        <span>שלח הסבר בוואטסאפ</span>
-                                    </button>
-                                </div>
-                                <button onClick={() => setView('issues')} className="w-full py-4 text-slate-500 font-bold underline text-lg">חזרה לרשימה</button>
-                            </div>
-                        )}
-
-                        {/* עזרת בינה מלאכותית */}
-                        {view === 'ai' && (
-                            <div className="space-y-4 animate-in">
-                                <div className="bg-white p-6 rounded-[2rem] shadow-2xl border-2 border-indigo-100">
-                                    <div className="flex items-center gap-2 mb-6 text-indigo-900 border-b pb-4">
-                                        <Icon name="help-circle" size={24} />
-                                        <h2 className="text-xl font-bold font-black uppercase tracking-tight">פתרון אישי:</h2>
-                                    </div>
-                                    {isAiLoading ? (
-                                        <div className="py-20 text-center space-y-4">
-                                            <Icon name="refresh-cw" size={48} className="animate-spin text-indigo-600 mx-auto opacity-50" />
-                                            <p className="font-bold text-slate-400 italic tracking-tight">מכין עבורכם פתרון פשוט...</p>
-                                        </div>
-                                    ) : (
-                                        <div className="space-y-4">
-                                            <div className="whitespace-pre-wrap text-lg leading-relaxed text-slate-800 font-bold bg-indigo-50/50 p-6 rounded-3xl shadow-inner border border-indigo-100">
-                                                {aiResponse}
-                                            </div>
-                                            <button 
-                                                onClick={() => handleShareToWhatsApp("פתרון GimlaTech אישי", aiResponse)}
-                                                className="w-full flex items-center justify-center gap-2 bg-green-500 text-white font-bold py-3 rounded-2xl shadow-lg active:scale-95 transition-all"
-                                            >
-                                                <Icon name="share-2" size={20} />
-                                                <span>שלח הסבר בוואטסאפ</span>
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-                                <button onClick={() => setView('issues')} className="w-full py-4 text-slate-400 font-bold text-lg underline">חזרה</button>
-                            </div>
-                        )}
-                    </main>
-
-                    {/* WhatsApp Support Fixed Footer */}
-                    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 w-full max-w-xs px-4">
-                        <a 
-                            href="https://wa.me/9725053960685" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="bg-white border-2 border-blue-50 p-4 rounded-3xl shadow-xl flex flex-col items-center justify-center gap-1 active:scale-95 transition-all text-center group"
-                        >
-                            <div className="flex items-center gap-2 text-slate-800 font-bold">
-                                <Icon name="phone" size={18} className="text-pink-500" />
-                                <span>צריכים עזרה אנושית?</span>
-                            </div>
-                            <span className="text-blue-600 font-extrabold text-xl tracking-wider">050-53960685</span>
-                        </a>
-                    </div>
-
-                    {/* Footer Tip (Only Home) */}
-                    {view === 'home' && (
-                        <footer className="p-6 bg-slate-50 border-t pb-32">
-                            <div className="bg-amber-100 p-5 rounded-3xl border-2 border-amber-200 flex gap-4 text-sm text-amber-900 items-center justify-center italic text-center font-bold shadow-sm leading-relaxed">
-                                <Icon name="alert-circle" size={24} className="text-amber-600 flex-shrink-0" />
-                                <span>טיפ: כיבוי והדלקה מחדש של המכשיר פותרים 90% מהתקלות!</span>
-                            </div>
-                        </footer>
-                    )}
-                </div>
-            );
-        }
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
 </body>
 </html>
