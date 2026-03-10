@@ -8,7 +8,6 @@
         :root { --main: #2563eb; --dark: #1e293b; --bg: #f8fafc; }
         body { font-family: system-ui, sans-serif; background: #e2e8f0; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
-        /* מסגרת האפליקציה */
         .app-shell { 
             width: 360px; height: 700px; background: white; 
             border: 10px solid var(--dark); border-radius: 40px; 
@@ -16,121 +15,268 @@
             display: flex; flex-direction: column; overflow: hidden;
         }
 
-        .header { background: var(--dark); color: white; padding: 20px; text-align: center; font-weight: bold; }
+        .header { background: var(--dark); color: white; padding: 20px; text-align: center; font-weight: bold; font-size: 18px; }
         .container { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
         
         .btn { 
             width: 100%; padding: 18px; margin-bottom: 12px; 
             background: white; border: 2px solid #cbd5e1; border-radius: 15px; 
             cursor: pointer; font-size: 17px; font-weight: bold; text-align: right;
-            display: flex; align-items: center;
+            display: flex; align-items: center; transition: all 0.15s;
         }
-        .btn:active { background: #f1f5f9; border-color: var(--main); }
+        .btn:active, .btn:hover { background: #f1f5f9; border-color: var(--main); }
         .icon { font-size: 24px; margin-left: 15px; }
 
-        .hidden { display: none; }
-        .back-btn { color: var(--main); cursor: pointer; font-weight: bold; margin-bottom: 15px; border: none; background: none; font-size: 14px; }
+        .hidden { display: none !important; }
+        .back-btn { color: var(--main); cursor: pointer; font-weight: bold; margin-bottom: 15px; border: none; background: none; font-size: 14px; padding: 0; }
         
-        textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px; margin: 10px 0; font-family: inherit; resize: none; box-sizing: border-box; }
-        .send-btn { background: var(--main); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; }
+        textarea { 
+            width: 100%; border: 1px solid #cbd5e1; border-radius: 10px; 
+            padding: 10px; margin: 10px 0; font-family: inherit; 
+            resize: none; box-sizing: border-box; font-size: 15px;
+            height: 90px;
+        }
+        .send-btn { 
+            background: var(--main); color: white; border: none; 
+            padding: 15px; border-radius: 12px; font-weight: bold; 
+            cursor: pointer; width: 100%; font-size: 16px;
+            transition: opacity 0.2s;
+        }
+        .send-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         
+        /* מסך AI */
+        .ai-box {
+            background: #eff6ff; border-radius: 15px; padding: 15px;
+            margin-top: 10px; border: 1px solid #bfdbfe;
+        }
+        .ai-box label { font-weight: bold; font-size: 14px; color: #1e40af; }
+
+        /* מסך תוצאה */
+        #s4 .result-card {
+            background: #f0fdf4; border: 1px solid #86efac; border-radius: 15px;
+            padding: 18px; margin-bottom: 15px;
+        }
+        #s4 .result-card h3 { margin: 0 0 10px; color: #166534; font-size: 16px; }
+        #s4 .result-card p { margin: 0; color: #14532d; font-size: 14px; line-height: 1.6; }
+        .loading { text-align: center; color: #64748b; font-size: 14px; padding: 20px; }
+        .spinner { 
+            display: inline-block; width: 24px; height: 24px;
+            border: 3px solid #e2e8f0; border-top-color: var(--main);
+            border-radius: 50%; animation: spin 0.8s linear infinite;
+            margin-bottom: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .error-box { background: #fef2f2; border: 1px solid #fca5a5; border-radius: 12px; padding: 15px; color: #b91c1c; font-size: 14px; }
+        .new-btn { background: #f1f5f9; border: 2px solid #cbd5e1; color: var(--dark); border-radius: 12px; padding: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 15px; }
+
         .footer { padding: 10px; text-align: center; border-top: 1px solid #f1f5f9; }
         .share { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 5px 15px; border-radius: 20px; font-size: 12px; cursor: pointer; }
+
+        /* תג מידע */
+        .context-tag { 
+            background: #dbeafe; color: #1e40af; font-size: 12px; 
+            padding: 4px 10px; border-radius: 20px; display: inline-block; margin-bottom: 12px;
+        }
     </style>
 </head>
 <body>
 
 <div class="app-shell">
-    <div class="header">GimlaTech Helper</div>
+    <div class="header">🛠️ GimlaTech Helper</div>
 
     <div class="container">
+
+        <!-- מסך 1: בחירת קטגוריה -->
         <div id="s1">
-            <h2 style="font-size: 20px; text-align: center;">במה אפשר לעזור?</h2>
+            <h2 style="font-size: 20px; text-align: center; margin-top: 5px;">במה אפשר לעזור?</h2>
             <button class="btn" onclick="go2('pc')"><span class="icon">💻</span>מחשב</button>
             <button class="btn" onclick="go2('phone')"><span class="icon">📱</span>טלפון</button>
             <button class="btn" onclick="go2('extra')"><span class="icon">🖨️</span>ציוד היקפי</button>
             
-            <div style="border: 2px dashed #cbd5e1; padding: 15px; border-radius: 15px; text-align: center; margin-top: 20px; color: #64748b;">
+            <div style="border: 2px dashed #cbd5e1; padding: 15px; border-radius: 15px; text-align: center; margin-top: 20px; color: #94a3b8; cursor: pointer;">
                 📸 העלאת צילום מסך
             </div>
         </div>
 
+        <!-- מסך 2: בחירת מערכת הפעלה/סוג -->
         <div id="s2" class="hidden">
             <button class="back-btn" onclick="go1()">← חזרה</button>
-            <h2 id="os-title" style="font-size: 18px;">איזו מערכת?</h2>
+            <h2 id="os-title" style="font-size: 18px;"></h2>
             <div id="os-list"></div>
         </div>
 
+        <!-- מסך 3: בחירת בעיה + תיאור חופשי -->
         <div id="s3" class="hidden">
             <button class="back-btn" onclick="goBackTo2()">← חזרה</button>
-            <h2 style="font-size: 18px;">מה הבעיה?</h2>
-            <button class="btn" onclick="done()">🌐 האינטרנט לא עובד</button>
-            <button class="btn" onclick="done()">🔌 המכשיר לא נדלק</button>
-            <button class="btn" onclick="done()">❄️ הכל קפוא</button>
+            <span class="context-tag" id="context-label"></span>
+            <h2 style="font-size: 18px; margin-top: 5px;">מה הבעיה?</h2>
+            <button class="btn" onclick="selectProblem('האינטרנט לא עובד')">🌐 האינטרנט לא עובד</button>
+            <button class="btn" onclick="selectProblem('המכשיר לא נדלק')">🔌 המכשיר לא נדלק</button>
+            <button class="btn" onclick="selectProblem('הכל קפוא / תקוע')">❄️ הכל קפוא</button>
             
-            <div style="margin-top: 20px; padding: 15px; background: #eff6ff; border-radius: 15px;">
-                <label style="font-weight: bold; font-size: 14px;">תיאור חופשי לעזרה מה-AI:</label>
+            <div class="ai-box">
+                <label>או תארו בחופשיות:</label>
                 <textarea id="ai-input" placeholder="כתבו כאן מה קרה..."></textarea>
-                <button class="send-btn" onclick="done()">שלח לבדיקת AI</button>
+                <button class="send-btn" id="send-btn" onclick="sendToAI()">שלח לניתוח AI 🤖</button>
             </div>
         </div>
+
+        <!-- מסך 4: תוצאת AI -->
+        <div id="s4" class="hidden">
+            <h2 style="font-size: 18px; margin-top: 5px;">ניתוח התקלה</h2>
+            <div id="ai-result"></div>
+            <button class="new-btn" onclick="go1()">🔄 בעיה חדשה</button>
+        </div>
+
     </div>
 
     <div class="footer">
-        <button class="share" onclick="alert('הקישור הועתק!')">🔗 שיתוף אפליקציה</button>
+        <button class="share" onclick="copyLink()">🔗 שיתוף אפליקציה</button>
     </div>
 </div>
 
 <script>
-    // הגדרות נתונים
     const data = {
-        pc: { t: 'איזה מחשב?', list: ['Windows (ווינדוס)', 'Mac (אפל)'] },
+        pc:    { t: 'איזה מחשב?',  list: ['Windows (ווינדוס)', 'Mac (אפל)'] },
         phone: { t: 'איזה טלפון?', list: ['Android (סמסונג/אחר)', 'iPhone (אפל)'] },
-        extra: { t: 'איזה ציוד?', list: ['מדפסת', 'רמקולים', 'עכבר/מקלדת'] }
+        extra: { t: 'איזה ציוד?',  list: ['מדפסת', 'רמקולים', 'עכבר / מקלדת'] }
     };
 
     let selectedDevice = '';
+    let selectedOS     = '';
 
-    // פונקציות ניווט פשוטות (ללא ספריות חיצוניות)
+    /* --- ניווט --- */
+    function showOnly(id) {
+        ['s1','s2','s3','s4'].forEach(s => {
+            document.getElementById(s).classList.toggle('hidden', s !== id);
+        });
+    }
+
     function go1() {
-        document.getElementById('s2').className = 'hidden';
-        document.getElementById('s1').className = '';
+        selectedDevice = '';
+        selectedOS = '';
+        document.getElementById('ai-input').value = '';
+        showOnly('s1');
     }
 
     function go2(device) {
         selectedDevice = device;
-        document.getElementById('s1').className = 'hidden';
-        document.getElementById('s2').className = '';
-        
         document.getElementById('os-title').innerText = data[device].t;
+
         const listDiv = document.getElementById('os-list');
         listDiv.innerHTML = '';
-        
         data[device].list.forEach(item => {
             const b = document.createElement('button');
             b.className = 'btn';
-            b.innerText = item;
-            b.onclick = go3;
+            b.innerHTML = `<span class="icon">💡</span>${item}`;
+            b.onclick = () => go3(item);
             listDiv.appendChild(b);
         });
+
+        showOnly('s2');
     }
 
-    function go3() {
-        document.getElementById('s2').className = 'hidden';
-        document.getElementById('s3').className = '';
-    }
-
-    function goBackTo2() {
-        document.getElementById('s3').className = 'hidden';
-        document.getElementById('s2').className = '';
-    }
-
-    function done() {
-        alert("הבקשה התקבלה! \nאנחנו מנתחים את התקלה עבורכם.");
-        // במקום לרענן (שיכול לגרום לבעיות בסביבות מסוימות), פשוט נחזור להתחלה
+    function go3(os) {
+        selectedOS = os;
+        document.getElementById('context-label').innerText = `${selectedDevice === 'pc' ? '💻' : selectedDevice === 'phone' ? '📱' : '🖨️'} ${os}`;
         document.getElementById('ai-input').value = '';
-        go1();
-        document.getElementById('s3').className = 'hidden';
+        showOnly('s3');
+    }
+
+    function goBackTo2() { showOnly('s2'); }
+
+    /* --- בחירת בעיה מוכנה --- */
+    function selectProblem(problem) {
+        document.getElementById('ai-input').value = problem;
+        sendToAI();
+    }
+
+    /* --- שליחה ל-AI --- */
+    async function sendToAI() {
+        const text = document.getElementById('ai-input').value.trim();
+        if (!text) {
+            document.getElementById('ai-input').focus();
+            document.getElementById('ai-input').style.borderColor = '#f87171';
+            setTimeout(() => document.getElementById('ai-input').style.borderColor = '#cbd5e1', 1500);
+            return;
+        }
+
+        const btn = document.getElementById('send-btn');
+        btn.disabled = true;
+        btn.innerText = 'שולח...';
+
+        showOnly('s4');
+        document.getElementById('ai-result').innerHTML = `
+            <div class="loading">
+                <div class="spinner"></div><br>
+                מנתח את התקלה...
+            </div>
+        `;
+
+        const prompt = `אתה עוזר טכני בעברית לאנשים מבוגרים בישראל. המשתמש פנה בנושא: ${selectedDevice || 'מכשיר טכנולוגי'} (${selectedOS || 'לא צוין סוג'}).
+        
+הבעיה: ${text}
+
+ענה בעברית פשוטה וברורה. תן:
+1. הסבר קצר מה כנראה קרה (משפט אחד-שניים)
+2. 3 צעדים מעשיים לפתרון, ממוספרים, בשפה פשוטה מאוד
+3. מתי לפנות לעזרה מקצועית
+
+אל תשתמש במונחים טכניים מסובכים. כתוב כאילו אתה מסביר לסבתא.`;
+
+        try {
+            const response = await fetch("https://api.anthropic.com/v1/messages", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    model: "claude-sonnet-4-20250514",
+                    max_tokens: 1000,
+                    messages: [{ role: "user", content: prompt }]
+                })
+            });
+
+            if (!response.ok) throw new Error(`שגיאת שרת: ${response.status}`);
+
+            const data = await response.json();
+            const answer = data.content
+                .filter(b => b.type === 'text')
+                .map(b => b.text)
+                .join('\n');
+
+            // המרת מספרים לשורות נפרדות
+            const formatted = answer
+                .replace(/\n/g, '<br>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+            document.getElementById('ai-result').innerHTML = `
+                <div class="result-card">
+                    <h3>🤖 ניתוח AI</h3>
+                    <p>${formatted}</p>
+                </div>
+            `;
+        } catch (err) {
+            document.getElementById('ai-result').innerHTML = `
+                <div class="error-box">
+                    ❌ לא הצלחנו לנתח כרגע.<br>
+                    נסו שוב עוד רגע או פנו לנציג שירות.
+                    <br><small style="color:#9ca3af">${err.message}</small>
+                </div>
+            `;
+        } finally {
+            btn.disabled = false;
+            btn.innerText = 'שלח לניתוח AI 🤖';
+        }
+    }
+
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            const btn = document.querySelector('.share');
+            btn.innerText = '✅ הועתק!';
+            setTimeout(() => btn.innerText = '🔗 שיתוף אפליקציה', 2000);
+        }).catch(() => {
+            alert('העתיקו את כתובת הדפדפן לשיתוף');
+        });
     }
 </script>
 
