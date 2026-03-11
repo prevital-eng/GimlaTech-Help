@@ -174,57 +174,38 @@ function selectOS(id, label) {
 }
 
 // ===== GEMINI =====
-const GEMINI_KEY = 'AIzaSyBJ-K-d5KtVIe-AQ-2YET3WXmn2ed2tLNM';
+// כתובת ה-Apps Script — תעדכני לאחר הפריסה
+const PROXY_URL = 'https://script.google.com/macros/s/AKfycbygHNSwS_gYDxrzxGSwvDdbJJcRNuvrLmrhEsze7-BRZqB0ahB0sfMHgLphuy7xgK0/exec';
 
 async function callGemini(userQuestion, imageBase64) {
-    const parts = [];
-    if (imageBase64) parts.push({ inlineData:{ mimeType:'image/jpeg', data:imageBase64 } });
-    parts.push({ text: userQuestion });
-
-    const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
-        {
-            method: 'POST',
-            headers: { 'Content-Type':'application/json' },
-            body: JSON.stringify({
-                systemInstruction: { parts:[{ text:
-                    `אתה עוזר טכני של גימלאטק — עוזרים למבוגרים עם טכנולוגיה.
+    const systemPrompt = `אתה עוזר טכני של גימלאטק — עוזרים למבוגרים עם טכנולוגיה.
 המכשיר: ${state.deviceLabel}, מערכת: ${state.osLabel}.
-חפש באינטרנט ותן פתרון.
 כללים: עברית פשוטה, 3-5 צעדים קצרים, טיפ אחד.
 החזר JSON בלבד ללא שום טקסט נוסף:
-{"title":"כותרת","steps":["צעד 1","צעד 2","צעד 3"],"tip":"טיפ"}`
-                }]},
-                contents: [{ role:'user', parts }],
-                tools: [{ googleSearch:{} }],
-                generationConfig: { temperature:0.2, maxOutputTokens:1200 }
-            })
-        }
-    );
+{"title":"כותרת","steps":["צעד 1","צעד 2","צעד 3"],"tip":"טיפ"}`;
 
-    if (!res.ok) {
-        const e = await res.json().catch(()=>({}));
-        throw new Error(e?.error?.message || `שגיאת שרת ${res.status}`);
-    }
+    const messages = [{ role:'user', content: userQuestion }];
+
+    const res = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ system: systemPrompt, messages })
+    });
+
+    if (!res.ok) throw new Error(`שגיאת שרת ${res.status}`);
 
     const data = await res.json();
+    if (data.error) throw new Error(data.error);
 
-    const rawText = (data.candidates?.[0]?.content?.parts || [])
-        .filter(p => p.text).map(p => p.text).join('');
+    const rawText = (data.content || [])
+        .filter(c => c.type === 'text').map(c => c.text).join('');
 
-    if (!rawText) throw new Error('לא התקבלה תשובה מ-Gemini');
+    if (!rawText) throw new Error('לא התקבלה תשובה');
 
     const jsonMatch = rawText.replace(/```json/gi,'').replace(/```/g,'').trim().match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error('תשובה בפורמט לא תקין');
 
-    const parsed = JSON.parse(jsonMatch[0]);
-
-    const sources = (data.candidates?.[0]?.groundingMetadata?.groundingChunks || [])
-        .filter(c => c.web?.uri)
-        .map(c => ({ url:c.web.uri, title:c.web.title||'מקור' }))
-        .slice(0,3);
-
-    return { parsed, sources };
+    return { parsed: JSON.parse(jsonMatch[0]), sources: [] };
 }
 
 // ===== UI HELPERS =====
