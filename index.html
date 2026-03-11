@@ -30,7 +30,6 @@
             overflow-x: hidden;
         }
 
-        /* סגנון כרטיסיות המכשירים */
         .card-btn {
             background-color: var(--surface);
             border: 2px solid var(--border);
@@ -51,7 +50,6 @@
             background-color: var(--surface2);
         }
 
-        /* שדה החיפוש - טקסט לבן על רקע כהה */
         .search-input {
             background-color: #1a2235 !important;
             color: #ffffff !important;
@@ -77,7 +75,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* פוטר ממורכז ללא חסימת לחיצות */
         .footer-nav {
             position: fixed;
             bottom: 20px;
@@ -193,7 +190,7 @@
                 <button onclick="selectDevice('peripheral', 'ציוד היקפי')" class="card-btn">
                     <span class="text-5xl mb-3">🖨️</span>
                     <span class="text-lg font-bold text-white">ציוד היקפי</span>
-                    <span class="text-xs text-gray-500">מדפסת / WiFi</span>
+                    <span class="text-xs text-gray-500">מדפסת / WiFi / אוזניות</span>
                 </button>
             </div>
         </section>
@@ -229,13 +226,16 @@
                     <div class="relative flex-grow">
                         <input type="text" id="query-input" placeholder="מה הבעיה? (למשל: איך מחברים אוזניות)" 
                                class="search-input w-full p-5 pr-6 rounded-2xl text-lg font-medium shadow-2xl"
-                               oninput="debouncedSearch()" onkeydown="if(event.key==='Enter') triggerAI()">
+                               onkeydown="if(event.key==='Enter') performSearch()">
                     </div>
                     <div class="flex gap-2">
-                        <button onclick="triggerAI()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 px-8 rounded-2xl transition-all shadow-lg flex-grow md:flex-grow-0">
+                        <button onclick="performSearch()" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-4 px-6 rounded-2xl transition-all shadow-lg">
+                            🔍 חפש
+                        </button>
+                        <button onclick="triggerAI()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 px-6 rounded-2xl transition-all shadow-lg flex-grow md:flex-grow-0">
                             🌐 שאל AI
                         </button>
-                        <button onclick="document.getElementById('image-upload').click()" class="bg-slate-700 hover:bg-slate-600 text-white p-4 rounded-2xl transition-all shadow-lg" title="צרף תמונה">
+                        <button onclick="document.getElementById('image-upload').click()" class="bg-slate-800 hover:bg-slate-700 text-white p-4 rounded-2xl transition-all shadow-lg" title="צרף תמונה">
                             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
                         </button>
                         <input type="file" id="image-upload" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
@@ -243,10 +243,12 @@
                 </div>
 
                 <div id="tags-container" class="flex flex-wrap gap-2"></div>
+                
+                <!-- Results only show after action -->
                 <div id="results-area" class="grid grid-cols-1 gap-3"></div>
             </div>
 
-            <!-- Solution Container (מוסתר כברירת מחדל) -->
+            <!-- Solution Container (Hidden by default) -->
             <div id="answer-container" class="hidden mt-8">
                 <div class="bg-[#1e293b] border-2 border-indigo-500/30 rounded-3xl p-6 md:p-10 shadow-2xl relative">
                     <button onclick="closeAnswer()" class="absolute left-4 top-4 text-gray-500 hover:text-white p-2">
@@ -277,12 +279,11 @@
             peripheral: [{ id: 'PC', label: 'מחשב', icon: '🖥️' }, { id: 'MOB', label: 'טלפון', icon: '📱' }]
         };
 
-        // מאגר ידע מורחב של שאלות "איך עושים"
         const KB = [
-            { id: 201, dev: ['AND', 'WIN'], cat: '📱 הודעות', title: 'איך מעבירים הודעות SMS למחשב?', steps: ['במחשב: כנס לאתר messages.google.com', 'בטלפון: פתח את אפליקציית "הודעות" (Messages)', 'לחץ על תמונת הפרופיל שלך ← "צימוד מכשירים"', 'סרוק עם הטלפון את קוד ה-QR שמופיע במחשב'], tip: 'לאחר מכן כל ההודעות יסונכרנו למחשב באופן קבוע.' },
-            { id: 202, dev: ['AND', 'IOS'], cat: '🔊 שמע', title: 'איך מחברים אוזניות לטלפון?', steps: ['הפעל את ה-Bluetooth בהגדרות הטלפון', 'ודא שהאוזניות במצב "צימוד" (pairing)', 'לחץ על שם האוזניות ברשימת המכשירים בטלפון', 'אשר את החיבור'], tip: 'אם האוזניות לא מופיעות, כבה והדלק אותן שוב.' },
-            { id: 203, dev: ['WIN'], cat: '🖥️ כללי', title: 'איך מצלמים מסך במחשב?', steps: ['לחץ על מקש Windows + Shift + S במקלדת', 'סמן עם העכבר את האזור שברצונך לצלם', 'התמונה נשמרה ב"לוח" - ניתן להדביק אותה בוואטסאפ (Ctrl+V)'], tip: 'התמונה נשמרת אוטומטית גם בתיקיית "צילומי מסך".' },
-            { id: 101, dev: ['AND', 'IOS'], cat: '⚙️ הגדרות', title: 'איך מגדילים את הכתב?', steps: ['כנס להגדרות ← תצוגה', 'חפש "גודל גופן" או "גודל טקסט"', 'הזז את הסמן ימינה עד לגודל הרצוי'], tip: 'באייפון ניתן להפעיל גם "טקסט מודגש".' }
+            { id: 201, dev: ['AND', 'WIN', 'ALL'], cat: '📱 הודעות', title: 'איך מעבירים הודעות SMS מהטלפון למחשב?', steps: ['במחשב: כנס לאתר messages.google.com', 'בטלפון: פתח את אפליקציית "הודעות" (Messages)', 'לחץ על תמונת הפרופיל שלך ← "צימוד מכשירים"', 'סרוק עם הטלפון את קוד ה-QR שמופיע במחשב'], tip: 'לאחר מכן כל ההודעות יסונכרנו למחשב באופן קבוע.' },
+            { id: 202, dev: ['AND', 'IOS', 'MOB', 'ALL'], cat: '🔊 שמע', title: 'איך מחברים אוזניות לטלפון?', steps: ['הפעל את ה-Bluetooth בהגדרות הטלפון', 'ודא שהאוזניות במצב "צימוד" (pairing) - לרוב לחיצה ארוכה על כפתור ההפעלה', 'חפש את שם האוזניות ברשימה בטלפון ולחץ עליו', 'אשר את החיבור'], tip: 'אם האוזניות לא מופיעות, כדאי לכבות ולהדליק אותן שוב.' },
+            { id: 101, dev: ['AND', 'IOS', 'ALL'], cat: '⚙️ הגדרות', title: 'איך מגדילים את הכתב?', steps: ['כנס להגדרות ← תצוגה', 'חפש "גודל גופן" או "גודל טקסט"', 'הזז את הסמן ימינה עד לגודל הרצוי'], tip: 'באייפון ניתן להפעיל גם "טקסט מודגש" לשיפור הקריאה.' },
+            { id: 204, dev: ['WIN', 'MAC', 'ALL'], cat: '🖨️ הדפסה', title: 'איך מדפיסים קובץ?', steps: ['פתח את הקובץ או הדף שברצונך להדפיס', 'לחץ על מקש Ctrl ועל האות P במקביל', 'בחר את המדפסת שלך מהרשימה', 'לחץ על כפתור "הדפס"'], tip: 'ודא שיש נייר במדפסת ושהיא דולקת.' }
         ];
 
         function goScreen(id) {
@@ -314,14 +315,14 @@
             state.osLabel = label;
             document.getElementById('bread-os').innerText = label;
             renderTags();
-            searchKB('');
+            document.getElementById('results-area').innerHTML = ""; // Clear results
             goScreen('search');
         }
 
         function renderTags() {
             const container = document.getElementById('tags-container');
             if(!container) return;
-            const relevantKB = KB.filter(item => item.dev.includes(state.os));
+            const relevantKB = KB.filter(item => item.dev.includes(state.os) || item.dev.includes('ALL'));
             const cats = [...new Set(relevantKB.map(k => k.cat))];
             container.innerHTML = cats.map(cat => `<button onclick="filterTag('${cat}')" class="tag ${state.activeTag === cat ? 'active' : ''}">${cat}</button>`).join('');
         }
@@ -329,24 +330,36 @@
         function filterTag(cat) {
             state.activeTag = state.activeTag === cat ? null : cat;
             renderTags();
-            searchKB(document.getElementById('query-input').value);
+            performSearch();
         }
 
-        let searchTimeout;
         function debouncedSearch() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => searchKB(document.getElementById('query-input').value), 300);
+            // Placeholder for debounced search if needed later. Currently using active button.
         }
 
-        function searchKB(q) {
+        function performSearch() {
+            const q = document.getElementById('query-input').value.toLowerCase();
             const resultsArea = document.getElementById('results-area');
             if(!resultsArea) return;
+            
+            closeAnswer();
+
             const filtered = KB.filter(item => 
-                item.dev.includes(state.os) && 
-                (item.title.toLowerCase().includes(q.toLowerCase()) || item.cat.toLowerCase().includes(q.toLowerCase())) && 
+                (item.dev.includes(state.os) || item.dev.includes('ALL')) && 
+                (item.title.toLowerCase().includes(q) || item.cat.toLowerCase().includes(q)) && 
                 (!state.activeTag || item.cat === state.activeTag)
             );
-            if (q.trim() === "" && !state.activeTag) { resultsArea.innerHTML = ""; return; }
+
+            if (q.trim() === "" && !state.activeTag) {
+                resultsArea.innerHTML = "";
+                return;
+            }
+
+            if (filtered.length === 0) {
+                resultsArea.innerHTML = `<div class="text-center py-6 text-gray-500">לא נמצאו פתרונות מוכנים. כדאי לנסות את כפתור ה-"שאל AI".</div>`;
+                return;
+            }
+
             resultsArea.innerHTML = filtered.map(item => `
                 <button onclick='showAnswer(${JSON.stringify(item)})' class="card-btn flex-row justify-between items-center p-5 text-right">
                     <div>
@@ -363,6 +376,7 @@
             document.getElementById('answer-container').classList.remove('hidden');
             const content = document.getElementById('answer-content');
             const badge = isAI ? `<span class="bg-indigo-500/20 text-indigo-400 text-xs font-bold px-2 py-1 rounded border border-indigo-500/20">🔍 מענה AI</span>` : `<span class="bg-green-500/20 text-green-400 text-xs font-bold px-2 py-1 rounded border border-green-500/20">מענה מהמאגר</span>`;
+            
             content.innerHTML = `
                 <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
                     ${badge}
@@ -385,12 +399,17 @@
 
         async function fetchAI(payload) {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const delays = [1000, 2000, 4000, 8000, 16000];
             for (let i = 0; i < 5; i++) {
                 try {
-                    const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    const response = await fetch(url, { 
+                        method: 'POST', 
+                        headers: { 'Content-Type': 'application/json' }, 
+                        body: JSON.stringify(payload) 
+                    });
                     if (response.ok) return await response.json();
                 } catch (e) {}
-                await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
+                await new Promise(r => setTimeout(r, delays[i]));
             }
             throw new Error("Failed");
         }
@@ -398,20 +417,29 @@
         async function triggerAI() {
             const query = document.getElementById('query-input').value;
             if (!query) return;
+            document.getElementById('results-area').innerHTML = ""; // Clear results
             document.getElementById('answer-container').classList.remove('hidden');
             const content = document.getElementById('answer-content');
-            content.innerHTML = `<div class="flex flex-col items-center py-10 gap-4"><div class="spinner"></div><p class="text-indigo-300 font-bold">ה-AI מכין פתרון...</p></div>`;
+            content.innerHTML = `<div class="flex flex-col items-center py-10 gap-4"><div class="spinner"></div><p class="text-indigo-300 font-bold">ה-AI מכין פתרון מותאם...</p></div>`;
+            
             try {
                 const payload = {
-                    contents: [{ parts: [{ text: `בעיה: ${query}. מכשיר: ${state.deviceLabel} (${state.osLabel}). הסבר שלב אחר שלב למבוגרים. החזר JSON: {"title":"...","steps":["..."],"tip":"..."}` }] }],
+                    contents: [{ parts: [{ text: `בעיה: ${query}. מכשיר: ${state.deviceLabel} (${state.osLabel}). תן פתרון פשוט למבוגרים. החזר JSON במבנה: {"title":"...","steps":["..."],"tip":"..."}` }] }],
+                    systemInstruction: { parts: [{ text: "אתה עוזר טכני למתנדבים המסייעים למבוגרים. החזר תשובה בעברית פשוטה ובפורמט JSON בלבד." }] },
                     tools: [{ "google_search": {} }],
                     generationConfig: { responseMimeType: "application/json" }
                 };
+                
                 const result = await fetchAI(payload);
-                const text = result.candidates[0].content.parts[0].text;
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!text) throw new Error("Empty");
+                
+                // Cleanup potentially messy JSON
                 const match = text.match(/\{[\s\S]*\}/);
                 showAnswer(JSON.parse(match ? match[0] : text), true);
-            } catch (err) { content.innerHTML = `<div class="text-center py-8 text-red-400">שגיאה בחיבור ל-AI. נסה לנסח מחדש.</div>`; }
+            } catch (err) { 
+                content.innerHTML = `<div class="text-center py-8 text-red-400 font-bold">שגיאה בחיבור ל-AI. נסה שוב בעוד רגע.</div>`; 
+            }
         }
 
         async function handleImageUpload(event) {
@@ -420,6 +448,7 @@
             const reader = new FileReader();
             reader.onload = async (e) => {
                 const base64Data = e.target.result.split(',')[1];
+                document.getElementById('results-area').innerHTML = ""; 
                 document.getElementById('answer-container').classList.remove('hidden');
                 const content = document.getElementById('answer-content');
                 content.innerHTML = `<div class="flex flex-col items-center py-10 gap-4"><div class="spinner"></div><p class="text-indigo-300 font-bold">מנתח תמונה... ✨</p></div>`;
@@ -428,8 +457,10 @@
                         contents: [{ parts: [{ text: "נתח את התמונה והצע פתרון למבוגר. החזר JSON: {\"title\":\"...\",\"steps\":[\"...\"],\"tip\":\"...\"}" }, { inlineData: { mimeType: "image/png", data: base64Data } }] }],
                         generationConfig: { responseMimeType: "application/json" }
                     });
-                    showAnswer(JSON.parse(result.candidates[0].content.parts[0].text), true);
-                } catch (err) { content.innerHTML = `<div class="text-center py-8 text-red-400">שגיאה בניתוח.</div>`; }
+                    const text = result.candidates[0].content.parts[0].text;
+                    const match = text.match(/\{[\s\S]*\}/);
+                    showAnswer(JSON.parse(match ? match[0] : text), true);
+                } catch (err) { content.innerHTML = `<div class="text-center py-8 text-red-400">שגיאה בניתוח התמונה.</div>`; }
             };
             reader.readAsDataURL(file);
         }
@@ -441,7 +472,10 @@
                 const result = await fetchAI({
                     contents: [{ parts: [{ text: `Say in a calm Hebrew voice: ${text}` }] }],
                     model: "gemini-2.5-flash-preview-tts",
-                    generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Aoede" } } } }
+                    generationConfig: { 
+                        responseModalities: ["AUDIO"], 
+                        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Aoede" } } } 
+                    }
                 });
                 const pcmData = result.candidates[0].content.parts[0].inlineData.data;
                 const pcmBuffer = Uint8Array.from(atob(pcmData), c => c.charCodeAt(0)).buffer;
@@ -454,7 +488,8 @@
                 view.setUint32(28, 48000, true); view.setUint16(32, 2, true);
                 view.setUint16(34, 16, true); view.setUint32(36, 0x64617461, false);
                 view.setUint32(40, pcmBuffer.byteLength, true);
-                new Audio(URL.createObjectURL(new Blob([wavHeader, pcmBuffer], { type: 'audio/wav' }))).play();
+                const audioBlob = new Blob([wavHeader, pcmBuffer], { type: 'audio/wav' });
+                new Audio(URL.createObjectURL(audioBlob)).play();
             } catch (err) {}
         }
 
@@ -464,14 +499,19 @@
             const original = content.innerHTML;
             content.innerHTML = `<div class="flex flex-col items-center py-10 gap-4"><div class="spinner"></div><p class="text-indigo-300 font-bold">מפשט עבור המבוגר... ✨</p></div>`;
             try {
-                const result = await fetchAI({ contents: [{ parts: [{ text: `פשט עבור מבוגר: ${JSON.stringify(state.currentAnswer)}` }] }], generationConfig: { responseMimeType: "application/json" } });
-                showAnswer(JSON.parse(result.candidates[0].content.parts[0].text), true);
+                const result = await fetchAI({ 
+                    contents: [{ parts: [{ text: `פשט עבור מבוגר: ${JSON.stringify(state.currentAnswer)}` }] }], 
+                    generationConfig: { responseMimeType: "application/json" } 
+                });
+                const text = result.candidates[0].content.parts[0].text;
+                const match = text.match(/\{[\s\S]*\}/);
+                showAnswer(JSON.parse(match ? match[0] : text), true);
             } catch (err) { content.innerHTML = original; }
         }
 
         function copyAnswer() {
             const a = state.currentAnswer;
-            const text = `*${a.title}*\n\n${a.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n💡 *טיפ:* ${a.tip}`;
+            const text = `*פתרון עבור: ${a.title}*\n\n${a.steps.map((s, i) => `*${i + 1}.* ${s}`).join('\n')}\n\n💡 *טיפ:* ${a.tip}\n\n_נשלח באמצעות GimlaTech AI Helper_`;
             const el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
             const btn = document.getElementById('copy-btn'); btn.innerHTML = "✅ הועתק!";
             setTimeout(() => { btn.innerHTML = "📋 העתק פתרון"; }, 2000);
