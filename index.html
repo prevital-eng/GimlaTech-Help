@@ -69,15 +69,17 @@
             outline: none;
         }
 
+        /* Fixed and Centered Footer Container */
         .footer-container {
             position: fixed;
             bottom: 20px;
             left: 0;
-            right: 0;
+            width: 100%;
             display: flex;
             justify-content: center;
             padding: 0 20px;
             z-index: 100;
+            pointer-events: none; /* Allow clicks to pass through container except for the button */
         }
 
         .whatsapp-btn {
@@ -85,8 +87,14 @@
             color: white;
             max-width: 500px;
             width: 100%;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s ease;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s ease, background-color 0.2s;
+            pointer-events: auto;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #1ebc57;
+            transform: scale(1.02);
         }
 
         .tag {
@@ -132,7 +140,7 @@
 <body class="pb-32">
 
     <!-- Header -->
-    <header class="w-full py-6 flex justify-center items-center gap-3 border-b border-gray-800">
+    <header class="w-full py-6 flex justify-center items-center gap-3 border-b border-gray-800 bg-[#0d121f]/80 backdrop-blur-md sticky top-0 z-50">
         <div class="flex items-center gap-2">
             <span class="text-2xl font-black tracking-tighter">Gimla<span class="text-sky-400">Tech</span></span>
             <span class="bg-indigo-500/10 text-indigo-400 text-xs font-bold px-2 py-1 rounded-full border border-indigo-500/20">AI HELPER</span>
@@ -158,22 +166,22 @@
                 <button onclick="selectDevice('computer', 'מחשב')" class="card rounded-2xl p-6 flex flex-col items-center gap-3">
                     <span class="text-5xl">🖥️</span>
                     <span class="text-lg font-bold">מחשב</span>
-                    <span class="text-xs text-gray-500">PC / Mac / Laptop</span>
+                    <span class="text-xs text-gray-500 text-center">PC / Mac / Laptop</span>
                 </button>
                 <button onclick="selectDevice('phone', 'טלפון')" class="card rounded-2xl p-6 flex flex-col items-center gap-3">
                     <span class="text-5xl">📱</span>
                     <span class="text-lg font-bold">טלפון חכם</span>
-                    <span class="text-xs text-gray-500">Android / iPhone</span>
+                    <span class="text-xs text-gray-500 text-center">Android / iPhone</span>
                 </button>
                 <button onclick="selectDevice('tablet', 'טאבלט')" class="card rounded-2xl p-6 flex flex-col items-center gap-3">
                     <span class="text-5xl">📟</span>
                     <span class="text-lg font-bold">טאבלט</span>
-                    <span class="text-xs text-gray-500">iPad / Samsung Tab</span>
+                    <span class="text-xs text-gray-500 text-center">iPad / Samsung Tab</span>
                 </button>
                 <button onclick="selectDevice('peripheral', 'ציוד היקפי')" class="card rounded-2xl p-6 flex flex-col items-center gap-3">
                     <span class="text-5xl">🖨️</span>
                     <span class="text-lg font-bold">ציוד היקפי</span>
-                    <span class="text-xs text-gray-500">מדפסת, עכבר, WiFi</span>
+                    <span class="text-xs text-gray-500 text-center">מדפסת, עכבר, WiFi</span>
                 </button>
             </div>
         </div>
@@ -184,8 +192,6 @@
                 <span>🏠 חזרה לבחירת מכשיר</span>
             </div>
             <h1 class="text-3xl font-extrabold mb-2 text-center" id="os-title">איזו מערכת הפעלה?</h1>
-            <p class="text-gray-400 text-center mb-8">סמן את המערכת הרלוונטית</p>
-
             <div class="flex items-center gap-2 mb-10 max-w-xs mx-auto">
                 <div class="step-dot done">✓</div>
                 <div class="step-line done"></div>
@@ -193,7 +199,6 @@
                 <div class="step-line"></div>
                 <div class="step-dot">3</div>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="os-options"></div>
         </div>
 
@@ -206,43 +211,30 @@
             </div>
 
             <div class="relative mb-8">
-                <input type="text" id="query-input" placeholder="תאר את הבעיה בקצרה... (למשל: איך מגדילים את הכתב?)" 
+                <input type="text" id="query-input" placeholder="תאר את הבעיה... ה-AI יחפש עבורך" 
                        class="search-input w-full p-5 pr-6 rounded-2xl text-lg font-medium shadow-2xl"
                        oninput="debouncedSearch()" onkeydown="if(event.key==='Enter') triggerAI()">
-                <button onclick="triggerAI()" class="absolute left-3 top-3 bg-sky-500 hover:bg-sky-400 text-black font-bold py-2 px-4 rounded-xl transition-colors">
-                    🤖 שאל AI
+                <button onclick="triggerAI()" class="absolute left-3 top-3 bg-indigo-500 hover:bg-indigo-400 text-white font-bold py-2 px-4 rounded-xl transition-all shadow-lg">
+                    🌐 חיפוש עמוק
                 </button>
             </div>
 
             <div id="tags-container" class="flex flex-wrap gap-2 mb-8"></div>
             <div id="results-area" class="space-y-4"></div>
 
-            <div id="answer-container" class="hidden mt-6 bg-[#1e293b] border border-indigo-500/30 rounded-3xl p-8 shadow-2xl">
+            <div id="answer-container" class="hidden mt-6 bg-[#1e293b] border border-indigo-500/30 rounded-3xl p-8 shadow-2xl mb-20">
                 <div id="answer-content"></div>
             </div>
         </div>
 
     </main>
 
-    <!-- Footer WhatsApp Button -->
+    <!-- Footer WhatsApp Support Button -->
     <div class="footer-container">
-        <button onclick="openWaModal()" class="whatsapp-btn flex items-center justify-center gap-3 py-4 px-8 rounded-2xl shadow-xl font-bold text-lg">
-            <span>עזרה מגימלאטק — 0505396068</span>
+        <button onclick="openSupportWa()" class="whatsapp-btn flex items-center justify-center gap-3 py-4 px-8 rounded-2xl font-bold text-lg">
+            <span>פנייה לסיירת גימלאטק — 0505396068</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
         </button>
-    </div>
-
-    <!-- Custom Modal -->
-    <div id="modal-overlay" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center p-6 z-[200]">
-        <div class="bg-[#1a2235] border border-gray-700 w-full max-w-sm rounded-3xl p-8 text-center">
-            <h3 class="text-xl font-bold mb-4" id="modal-title">שלח למבוגר</h3>
-            <p class="text-gray-400 mb-6" id="modal-desc">הכנס את מספר הטלפון:</p>
-            <input type="tel" id="modal-input" placeholder="05XXXXXXXX" class="w-full p-4 bg-gray-900 border border-gray-700 rounded-xl mb-6 text-center text-xl">
-            <div class="flex gap-2">
-                <button onclick="confirmModal()" class="flex-1 bg-green-500 py-3 rounded-xl font-bold">שלח בוואטסאפ</button>
-                <button onclick="closeModal()" class="flex-1 bg-gray-700 py-3 rounded-xl">ביטול</button>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -257,18 +249,10 @@
         };
 
         const KB = [
-            // How-to Questions (איך)
-            { id: 101, dev: ['AND', 'IOS'], cat: '⚙️ הגדרות', title: 'איך מגדילים את הכתב (גופן)?', steps: ['כנס להגדרות המכשיר', 'בחר ב"תצוגה" או "נגישות"', 'לחץ על "גודל טקסט" או "גופן"', 'גרור את הסמן ימינה עד שהכתב גדול מספיק'], tip: 'אפשר גם להפעיל "כתב מודגש" באותו תפריט כדי להקל על הקריאה.' },
-            { id: 102, dev: ['AND', 'IOS'], cat: '🎥 תקשורת', title: 'איך מצטרפים לשיחת זום (Zoom)?', steps: ['לחץ על הקישור שקיבלת בוואטסאפ', 'אם האפליקציה מותקנת, היא תיפתח אוטומטית', 'לחץ על "Join with Video"', 'חשוב: לחץ על WiFi or Cellular Data כדי לשמוע ולהישמע'], tip: 'אם לא שומעים אתכם, בדקו שאין סמל של מיקרופון אדום עם קו עליו.' },
-            { id: 103, dev: ['AND', 'IOS'], cat: '📱 וואטסאפ', title: 'איך שולחים תמונה בוואטסאפ?', steps: ['כנס לשיחה עם האדם הרצוי', 'לחץ על סמל המהדק או הפלוס (+)', 'בחר ב"גלריה" או "תמונות"', 'בחר את התמונה ולחץ על חץ השליחה הירוק'], tip: 'אפשר להוסיף כיתוב לתמונה לפני ששולחים אותה.' },
-            { id: 104, dev: ['AND', 'IOS'], cat: '📸 מדיה', title: 'איך מוחקים תמונות כדי לפנות מקום?', steps: ['כנס לאפליקציית "גלריה" או "תמונות"', 'לחץ לחיצה ארוכה על תמונה שרוצים למחוק', 'סמן תמונות נוספות בלחיצה קלה', 'לחץ על סמל הפח ואשר את המחיקה'], tip: 'אל תשכחו לרוקן גם את "סל המחזור" בתוך הגלריה כדי שהמקום באמת יתפנה.' },
-            { id: 105, dev: ['AND', 'IOS'], cat: '🔍 כללי', title: 'איך סורקים קוד QR?', steps: ['פתח את אפליקציית המצלמה', 'כוון את המצלמה לכיוון הריבוע של הקוד', 'המתן שיופיע קישור צהוב או לבן על המסך', 'לחץ על הקישור כדי להיכנס לאתר'], tip: 'במכשירים ישנים ייתכן שתצטרכו להוריד אפליקציית "סורק QR" מהחנות.' },
-            { id: 106, dev: ['AND', 'IOS'], cat: '📱 וואטסאפ', title: 'איך מקליטים הודעה קולית?', steps: ['כנס לשיחה בוואטסאפ', 'לחץ והחזק את סמל המיקרופון הירוק', 'דבר בזמן שהסמל לחוץ', 'עזוב את הסמל כדי לשלוח את ההודעה'], tip: 'אם ההודעה ארוכה, אפשר להחליק את המיקרופון למעלה לכיוון המנעול כדי להקליט בלי להחזיק.' },
-            
-            // Existing Logic Items
-            { id: 1, dev: ['WIN', 'MAC'], cat: '🌐 אינטרנט', title: 'אין חיבור לאינטרנט', steps: ['ודא שמתג ה-WiFi מופעל', 'נתק את הנתב מהחשמל ל-30 שניות וחבר שוב', 'בחר את הרשת הביתית והכנס סיסמה'], tip: 'לפעמים פשוט "כיבוי והדלקה" של המחשב פותר הכל.' },
-            { id: 2, dev: ['AND', 'IOS'], cat: '📱 וואטסאפ', title: 'וואטסאפ לא נפתח', steps: ['סגור את האפליקציה לחלוטין', 'בדוק אם יש עדכון בחנות האפליקציות', 'הפעל מחדש את המכשיר'], tip: 'ודא שיש מספיק מקום פנוי בטלפון.' },
-            { id: 3, dev: ['WIN'], cat: '❄️ ביצועים', title: 'המחשב איטי מאוד', steps: ['בצע הפעלה מחדש', 'סגור טאבים מיותרים בדפדפן', 'ודא שאין עדכוני מערכת שממתינים ברקע'], tip: 'מחשב שלא כובה שבועות נוטה להיות איטי.' }
+            { id: 101, dev: ['AND', 'IOS'], cat: '⚙️ הגדרות', title: 'איך מגדילים את הכתב (גופן)?', steps: ['כנס להגדרות המכשיר', 'בחר ב"תצוגה" או "נגישות"', 'לחץ על "גודל טקסט" או "גופן"', 'גרור את הסמן ימינה עד שהכתב גדול מספיק'], tip: 'ב-iPhone אפשר גם להפעיל "כתב מודגש" באותו תפריט.' },
+            { id: 102, dev: ['AND', 'IOS'], cat: '🎥 תקשורת', title: 'איך מצטרפים לשיחת זום (Zoom)?', steps: ['לחץ על הקישור שקיבלת', 'אם האפליקציה מותקנת היא תיפתח', 'לחץ על "הצטרף עם וידאו"', 'חשוב: לחץ על WiFi or Cellular Data כדי להפעיל סאונד'], tip: 'לוודא שהאפליקציה מעודכנת לגרסה האחרונה.' },
+            { id: 103, dev: ['AND', 'IOS'], cat: '📱 וואטסאפ', title: 'איך שולחים תמונה בוואטסאפ?', steps: ['כנס לשיחה עם האדם הרצוי', 'לחץ על סמל המהדק (אנדרואיד) או הפלוס (אייפון)', 'בחר ב"גלריה" או "ספריית תמונות"', 'בחר את התמונה ולחץ על חץ השליחה'], tip: 'אפשר לשלוח כמה תמונות יחד על ידי לחיצה ארוכה בגלריה.' },
+            { id: 1, dev: ['WIN', 'MAC'], cat: '🌐 אינטרנט', title: 'אין חיבור לאינטרנט', steps: ['ודא שמתג ה-WiFi מופעל', 'נתק את הנתב מהחשמל ל-30 שניות וחבר שוב', 'בחר את הרשת הביתית והכנס סיסמה'], tip: 'לפעמים פשוט "כיבוי והדלקה" של המחשב פותר הכל.' }
         ];
 
         function goScreen(id) {
@@ -327,26 +311,43 @@
                 (item.title.toLowerCase().includes(q.toLowerCase()) || item.cat.toLowerCase().includes(q.toLowerCase())) && 
                 (!state.activeTag || item.cat === state.activeTag));
             
-            if (filtered.length === 0 && q.length > 2) {
-                resultsArea.innerHTML = `<div class="text-center py-12 bg-gray-800/30 rounded-3xl border border-dashed border-gray-700"><p class="text-gray-400 mb-4">לא מצאנו פתרון מוכן במאגר...</p><button onclick="triggerAI()" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-xl font-bold">🤖 שאל את עוזר ה-AI שלנו</button></div>`;
-                return;
-            }
-            resultsArea.innerHTML = filtered.map(item => `<div onclick='showAnswer(${JSON.stringify(item)})' class="card p-5 rounded-2xl cursor-pointer flex justify-between items-center group"><div><span class="text-xs text-sky-400 font-bold uppercase tracking-widest">${item.cat}</span><h3 class="text-lg font-bold mt-1">${item.title}</h3></div><span class="text-gray-600 group-hover:text-white">◀</span></div>`).join('');
+            resultsArea.innerHTML = filtered.map(item => `
+                <div onclick='showAnswer(${JSON.stringify(item)})' class="card p-5 rounded-2xl cursor-pointer flex justify-between items-center group">
+                    <div>
+                        <span class="text-xs text-sky-400 font-bold uppercase tracking-widest">${item.cat}</span>
+                        <h3 class="text-lg font-bold mt-1">${item.title}</h3>
+                    </div>
+                    <span class="text-gray-600 group-hover:text-white">◀</span>
+                </div>
+            `).join('');
         }
 
-        function showAnswer(item) {
+        function showAnswer(item, isAI = false) {
             state.currentAnswer = item;
             document.getElementById('results-area').innerHTML = '';
             const container = document.getElementById('answer-container');
             container.classList.remove('hidden');
+            
+            const badge = isAI ? 
+                `<span class="bg-indigo-500/20 text-indigo-400 text-xs font-bold px-2 py-1 rounded border border-indigo-500/20">🔍 חיפוש עמוק (AI)</span>` : 
+                `<span class="bg-green-500/20 text-green-400 text-xs font-bold px-2 py-1 rounded border border-green-500/20">מענה מהמאגר</span>`;
+
             document.getElementById('answer-content').innerHTML = `
-                <div class="flex items-center gap-2 mb-4"><span class="bg-green-500/20 text-green-400 text-xs font-bold px-2 py-1 rounded border border-green-500/20">פתרון מומלץ</span></div>
+                <div class="flex items-center gap-2 mb-4">${badge}</div>
                 <h2 class="text-2xl font-black mb-6">${item.title}</h2>
                 <div class="space-y-4 mb-8">
-                    ${item.steps.map((step, i) => `<div class="flex gap-4 items-start"><span class="flex-shrink-0 w-8 h-8 bg-sky-500 text-black font-bold rounded-full flex items-center justify-center">${i + 1}</span><p class="text-lg pt-1">${step}</p></div>`).join('')}
+                    ${item.steps.map((step, i) => `
+                        <div class="flex gap-4 items-start">
+                            <span class="flex-shrink-0 w-8 h-8 bg-sky-500 text-black font-bold rounded-full flex items-center justify-center">${i + 1}</span>
+                            <p class="text-lg pt-1">${step}</p>
+                        </div>
+                    `).join('')}
                 </div>
                 <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 mb-6"><p class="text-amber-400 text-sm">💡 <b>טיפ:</b> ${item.tip}</p></div>
-                <button onclick="openShareModal()" class="w-full bg-green-500 hover:bg-green-400 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg">📱 שלח הוראות למבוגר בוואטסאפ</button>
+                
+                <button id="copy-btn" onclick="copyAnswer()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg transition-all">
+                    <span>📋 העתק תשובה (להדבקה בוואטסאפ)</span>
+                </button>
             `;
             container.scrollIntoView({ behavior: 'smooth' });
         }
@@ -356,12 +357,11 @@
                 try {
                     const response = await fetch(url, options);
                     if (response.ok) return await response.json();
-                    if (response.status !== 429 && response.status < 500) break;
                 } catch (e) {}
                 await new Promise(resolve => setTimeout(resolve, delay));
                 delay *= 2;
             }
-            throw new Error("Failed after retries");
+            throw new Error("Failed");
         }
 
         async function triggerAI() {
@@ -370,13 +370,14 @@
 
             const answerContainer = document.getElementById('answer-container');
             answerContainer.classList.remove('hidden');
-            document.getElementById('answer-content').innerHTML = `<div class="flex flex-col items-center py-10 gap-4"><div class="spinner"></div><p class="text-indigo-300">ה-AI מנתח ומכין פתרון...</p></div>`;
+            document.getElementById('answer-content').innerHTML = `<div class="flex flex-col items-center py-10 gap-4"><div class="spinner"></div><p class="text-indigo-300 font-bold">מבצע חיפוש עמוק במאגרי התמיכה...</p></div>`;
 
-            const systemPrompt = `אתה מומחה תמיכה טכנית עבור "גימלאטק". תפקידך לעזור למתנדבים להסביר דברים למבוגרים. השתמש בשפה פשוטה. מכשיר: ${state.deviceLabel} (${state.osLabel}). החזר JSON בלבד.`;
+            const systemPrompt = `אתה מומחה תמיכה טכנית בכיר עבור "גימלאטק". החזר JSON בלבד: { "title": "כותרת", "steps": ["צעד 1"...], "tip": "טיפ" }`;
 
             const payload = {
-                contents: [{ parts: [{ text: `הבעיה: ${query}` }] }],
+                contents: [{ parts: [{ text: `איך ${query} ב-${state.osLabel} ${state.deviceLabel} support official` }] }],
                 systemInstruction: { parts: [{ text: systemPrompt }] },
+                tools: [{ "google_search": {} }],
                 generationConfig: { 
                     responseMimeType: "application/json",
                     responseSchema: {
@@ -392,51 +393,38 @@
             };
 
             try {
-                const result = await fetchWithRetry(
-                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
-                    { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }
-                );
-                
+                const result = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                 const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!text) throw new Error("Empty response");
-                
-                const aiResponse = JSON.parse(text);
-                showAnswer({ ...aiResponse, cat: '🤖 AI HELPER' });
+                showAnswer(JSON.parse(text), true);
             } catch (err) {
-                document.getElementById('answer-content').innerHTML = `
-                    <div class="text-center py-8">
-                        <p class="text-red-400 font-bold mb-2">שגיאה בתקשורת עם ה-AI</p>
-                        <p class="text-sm text-gray-400">המערכת לא הצליחה לקבל תשובה. נסה לנסח את השאלה אחרת.</p>
-                        <button onclick="triggerAI()" class="mt-4 text-sky-400 underline">נסה שוב</button>
-                    </div>
-                `;
+                document.getElementById('answer-content').innerHTML = `<p class="text-red-400 text-center py-10">שגיאה. נסה שוב.</p>`;
             }
         }
 
-        let currentModalAction = '';
-        function openWaModal() {
-            currentModalAction = 'support';
-            document.getElementById('modal-title').innerText = 'צ\'אט עם תמיכת גימלאטק';
-            document.getElementById('modal-input').value = '0505396068';
-            document.getElementById('modal-overlay').classList.remove('hidden');
+        function copyAnswer() {
+            const a = state.currentAnswer;
+            if (!a) return;
+            const text = `*פתרון רשמי עבור: ${a.title}*\n\n${a.steps.map((s, i) => `*${i + 1}.* ${s}`).join('\n')}\n\n💡 *טיפ:* ${a.tip}\n\n_נשלח באמצעות GimlaTech AI Helper_`;
+            
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = text;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+
+            const btn = document.getElementById('copy-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "✅ הועתק ללוח!";
+            btn.classList.replace('bg-indigo-600', 'bg-green-600');
+            setTimeout(() => { 
+                btn.innerHTML = originalText; 
+                btn.classList.replace('bg-green-600', 'bg-indigo-600');
+            }, 2000);
         }
 
-        function openShareModal() {
-            currentModalAction = 'share';
-            document.getElementById('modal-title').innerText = 'שלח הוראות למבוגר';
-            document.getElementById('modal-input').value = '';
-            document.getElementById('modal-overlay').classList.remove('hidden');
-        }
-
-        function closeModal() { document.getElementById('modal-overlay').classList.add('hidden'); }
-
-        function confirmModal() {
-            let phone = document.getElementById('modal-input').value.replace(/\D/g, '');
-            if (!phone) return;
-            if (phone.startsWith('0')) phone = '972' + phone.substring(1);
-            let message = currentModalAction === 'share' && state.currentAnswer ? `*פתרון עבור: ${state.currentAnswer.title}*\n\n${state.currentAnswer.steps.map((s,i) => `*${i+1}.* ${s}`).join('\n')}\n\n💡 *טיפ:* ${state.currentAnswer.tip}` : "היי, אני מתנדב בגימלאטק וזקוק לעזרה...";
-            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
-            closeModal();
+        function openSupportWa() {
+            window.open(`https://wa.me/972505396068?text=${encodeURIComponent("היי, אני מתנדב בגימלאטק וזקוק לעזרה נוספת...")}`, '_blank');
         }
     </script>
 </body>
