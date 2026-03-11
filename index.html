@@ -27,9 +27,9 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
 
-        /* Card styles as buttons for better interaction */
         .card-btn {
             background-color: var(--surface);
             border: 2px solid var(--border);
@@ -50,8 +50,20 @@
             background-color: var(--surface2);
         }
 
-        .card-btn:active {
-            transform: scale(0.98);
+        .search-input {
+            background-color: #1a2235 !important;
+            color: #ffffff !important;
+            border: 2px solid var(--border);
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: #94a3b8 !important;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            background-color: #222b42 !important;
         }
 
         .screen {
@@ -68,7 +80,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Fixed Footer - Only takes space of the button */
         .footer-nav {
             position: fixed;
             bottom: 20px;
@@ -77,7 +88,7 @@
             display: flex;
             justify-content: center;
             z-index: 1000;
-            pointer-events: none; /* Container doesn't block clicks */
+            pointer-events: none;
             padding: 0 20px;
         }
 
@@ -92,7 +103,7 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            pointer-events: auto; /* Button itself does block/receive clicks */
+            pointer-events: auto;
             border: none;
             cursor: pointer;
             max-width: 500px;
@@ -111,6 +122,7 @@
             border-radius: 9999px;
             font-size: 0.875rem;
             transition: all 0.2s;
+            color: var(--text-muted);
         }
 
         .tag.active {
@@ -144,14 +156,31 @@
         .step-dot.active { border-color: var(--accent); color: var(--accent); }
         .step-dot.done { background: var(--accent); border-color: var(--accent); color: #000; }
         .step-line { flex: 1; height: 2px; background: var(--border); }
+
+        .ai-action-btn {
+            background: rgba(129, 140, 248, 0.1);
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            color: var(--purple);
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+        .ai-action-btn:hover {
+            background: rgba(129, 140, 248, 0.2);
+            transform: scale(1.02);
+        }
     </style>
 </head>
 <body class="pb-32">
 
-    <!-- Sticky Header -->
     <header class="w-full py-6 flex justify-center items-center gap-3 border-b border-gray-800 bg-[#0d121f]/90 backdrop-blur-md sticky top-0 z-50">
         <div class="flex items-center gap-2">
-            <span class="text-2xl font-black tracking-tighter">Gimla<span class="text-sky-400">Tech</span></span>
+            <span class="text-2xl font-black tracking-tighter text-white">Gimla<span class="text-sky-400">Tech</span></span>
             <span class="bg-indigo-500/10 text-indigo-400 text-xs font-bold px-2 py-1 rounded-full border border-indigo-500/20 uppercase">AI Helper</span>
         </div>
     </header>
@@ -160,7 +189,7 @@
 
         <!-- Screen 1: Device Selection -->
         <section id="screen-device" class="screen active">
-            <h1 class="text-3xl font-extrabold mb-2 text-center">במה לעזור היום?</h1>
+            <h1 class="text-3xl font-extrabold mb-2 text-center text-white">במה לעזור היום?</h1>
             <p class="text-gray-400 text-center mb-8 text-lg">בחר את סוג המכשיר שבו יש תקלה</p>
             
             <div class="flex items-center gap-2 mb-10 max-w-xs mx-auto">
@@ -174,22 +203,22 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <button onclick="selectDevice('computer', 'מחשב')" class="card-btn">
                     <span class="text-5xl mb-3">🖥️</span>
-                    <span class="text-lg font-bold">מחשב</span>
+                    <span class="text-lg font-bold text-white">מחשב</span>
                     <span class="text-xs text-gray-500">PC / Laptop</span>
                 </button>
                 <button onclick="selectDevice('phone', 'טלפון')" class="card-btn">
                     <span class="text-5xl mb-3">📱</span>
-                    <span class="text-lg font-bold">טלפון חכם</span>
+                    <span class="text-lg font-bold text-white">טלפון חכם</span>
                     <span class="text-xs text-gray-500">Android / iPhone</span>
                 </button>
                 <button onclick="selectDevice('tablet', 'טאבלט')" class="card-btn">
                     <span class="text-5xl mb-3">📟</span>
-                    <span class="text-lg font-bold">טאבלט</span>
+                    <span class="text-lg font-bold text-white">טאבלט</span>
                     <span class="text-xs text-gray-500">iPad / Galaxy Tab</span>
                 </button>
                 <button onclick="selectDevice('peripheral', 'ציוד היקפי')" class="card-btn">
                     <span class="text-5xl mb-3">🖨️</span>
-                    <span class="text-lg font-bold">ציוד היקפי</span>
+                    <span class="text-lg font-bold text-white">ציוד היקפי</span>
                     <span class="text-xs text-gray-500">מדפסת / WiFi</span>
                 </button>
             </div>
@@ -200,7 +229,7 @@
             <button class="flex items-center gap-2 text-sm text-gray-500 mb-6 hover:text-sky-400 transition-colors" onclick="goScreen('device')">
                 <span>🏠 חזרה לבחירת מכשיר</span>
             </button>
-            <h1 class="text-3xl font-extrabold mb-2 text-center">איזו מערכת הפעלה?</h1>
+            <h1 class="text-3xl font-extrabold mb-2 text-center text-white">איזו מערכת הפעלה?</h1>
             
             <div class="flex items-center gap-2 mb-10 max-w-xs mx-auto">
                 <div class="step-dot done">✓</div>
@@ -213,7 +242,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="os-options"></div>
         </section>
 
-        <!-- Screen 3: Search & Answers -->
+        <!-- Screen 3: Search -->
         <section id="screen-search" class="screen">
             <div class="flex items-center gap-4 text-sm mb-6 flex-wrap bg-gray-800/20 p-3 rounded-xl border border-gray-800">
                 <button onclick="goScreen('device')" class="text-gray-400 hover:text-white">🏠 מכשיר: <b id="bread-device" class="text-sky-400"></b></button>
@@ -221,11 +250,18 @@
                 <button onclick="goScreen('os')" class="text-gray-400 hover:text-white">💻 מערכת: <b id="bread-os" class="text-sky-400"></b></button>
             </div>
 
-            <div class="relative mb-8">
-                <input type="text" id="query-input" placeholder="תאר את הבעיה בפירוט..." 
-                       class="search-input w-full p-5 pr-6 rounded-2xl text-lg font-medium shadow-2xl"
-                       oninput="debouncedSearch()" onkeydown="if(event.key==='Enter') triggerAI()">
-                <button onclick="triggerAI()" class="absolute left-3 top-3 bg-indigo-500 hover:bg-indigo-400 text-white font-bold py-2 px-6 rounded-xl transition-all shadow-lg">
+            <div class="relative mb-8 flex gap-2">
+                <div class="relative flex-grow">
+                    <input type="text" id="query-input" placeholder="תאר את הבעיה בפירוט..." 
+                           class="search-input w-full p-5 pr-14 rounded-2xl text-lg font-medium shadow-2xl"
+                           oninput="debouncedSearch()" onkeydown="if(event.key==='Enter') triggerAI()">
+                    
+                    <button onclick="document.getElementById('image-upload').click()" class="absolute right-4 top-1/2 -translate-y-1/2 text-sky-400 hover:text-sky-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+                    </button>
+                    <input type="file" id="image-upload" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+                </div>
+                <button onclick="triggerAI()" class="bg-indigo-500 hover:bg-indigo-400 text-white font-bold py-2 px-6 rounded-xl transition-all shadow-lg">
                     🌐 שאל AI
                 </button>
             </div>
@@ -240,7 +276,6 @@
 
     </main>
 
-    <!-- Perfectly Centered Navigation/Support -->
     <nav class="footer-nav">
         <button onclick="openSupportWa()" class="whatsapp-btn">
             <span>סיוע מסיירת גימלאטק — 0505396068</span>
@@ -261,8 +296,6 @@
 
         const KB = [
             { id: 101, dev: ['AND', 'IOS'], cat: '⚙️ הגדרות', title: 'איך מגדילים את הכתב (גופן)?', steps: ['כנס להגדרות המכשיר', 'בחר ב"תצוגה" או "נגישות"', 'לחץ על "גודל טקסט" או "גופן"', 'גרור את הסמן ימינה עד שהכתב גדול מספיק'], tip: 'ב-iPhone אפשר גם להפעיל "כתב מודגש" באותו תפריט.' },
-            { id: 102, dev: ['AND', 'IOS'], cat: '🎥 תקשורת', title: 'איך מצטרפים לשיחת זום (Zoom)?', steps: ['לחץ על הקישור שקיבלת בוואטסאפ', 'אם האפליקציה מותקנת, היא תיפתח', 'לחץ על "Join with Video"', 'חשוב: לחץ על WiFi or Cellular Data כדי להפעיל סאונד'], tip: 'לוודא תמיד שהאפליקציה מעודכנת לגרסה האחרונה.' },
-            { id: 103, dev: ['AND', 'IOS'], cat: '📱 וואטסאפ', title: 'איך שולחים תמונה בוואטסאפ?', steps: ['כנס לשיחה עם האדם הרצוי', 'לחץ על סמל המהדק (אנדרואיד) או הפלוס (אייפון)', 'בחר ב"גלריה" או "ספריית תמונות"', 'בחר את התמונה ולחץ על חץ השליחה הירוק'], tip: 'אפשר לשלוח כמה תמונות יחד על ידי לחיצה ארוכה בגלריה.' },
             { id: 1, dev: ['WIN', 'MAC'], cat: '🌐 אינטרנט', title: 'אין חיבור לאינטרנט', steps: ['ודא שמתג ה-WiFi מופעל', 'נתק את הנתב מהחשמל ל-30 שניות וחבר שוב', 'בחר את הרשת הביתית והכנס סיסמה'], tip: 'לפעמים פשוט הפעלה מחדש של המחשב פותרת את הבעיה.' }
         ];
 
@@ -277,13 +310,12 @@
             state.device = id;
             state.deviceLabel = label;
             document.getElementById('bread-device').innerText = label;
-            
             const container = document.getElementById('os-options');
             if(container) {
                 container.innerHTML = OS_OPTIONS[id].map(os => `
                     <button onclick="selectOS('${os.id}', '${os.label}')" class="card-btn gap-4">
                         <span class="text-5xl">${os.icon}</span>
-                        <span class="text-xl font-bold">${os.label}</span>
+                        <span class="text-xl font-bold text-white">${os.label}</span>
                     </button>
                 `).join('');
             }
@@ -323,19 +355,17 @@
             const resultsArea = document.getElementById('results-area');
             const answerContainer = document.getElementById('answer-container');
             if(!resultsArea || !answerContainer) return;
-            
             answerContainer.classList.add('hidden');
             const filtered = KB.filter(item => 
                 item.dev.includes(state.os) && 
                 (item.title.toLowerCase().includes(q.toLowerCase()) || item.cat.toLowerCase().includes(q.toLowerCase())) && 
                 (!state.activeTag || item.cat === state.activeTag)
             );
-            
             resultsArea.innerHTML = filtered.map(item => `
                 <button onclick='showAnswer(${JSON.stringify(item)})' class="card-btn flex-row justify-between items-center p-5">
                     <div class="text-right">
                         <span class="text-xs text-sky-400 font-bold uppercase tracking-widest">${item.cat}</span>
-                        <h3 class="text-lg font-bold mt-1">${item.title}</h3>
+                        <h3 class="text-lg font-bold text-white mt-1">${item.title}</h3>
                     </div>
                     <span class="text-gray-600">◀</span>
                 </button>
@@ -344,106 +374,178 @@
 
         function showAnswer(item, isAI = false) {
             state.currentAnswer = item;
-            const resultsArea = document.getElementById('results-area');
+            document.getElementById('results-area').innerHTML = '';
             const container = document.getElementById('answer-container');
             const content = document.getElementById('answer-content');
+            container.classList.remove('hidden');
+            const badge = isAI ? `<span class="bg-indigo-500/20 text-indigo-400 text-xs font-bold px-2 py-1 rounded border border-indigo-500/20">🔍 מענה AI</span>` : `<span class="bg-green-500/20 text-green-400 text-xs font-bold px-2 py-1 rounded border border-green-500/20">מענה מהמאגר</span>`;
             
-            if(resultsArea) resultsArea.innerHTML = '';
-            if(container) container.classList.remove('hidden');
-            
-            const badge = isAI ? 
-                `<span class="bg-indigo-500/20 text-indigo-400 text-xs font-bold px-2 py-1 rounded border border-indigo-500/20">🔍 מענה AI מורחב</span>` : 
-                `<span class="bg-green-500/20 text-green-400 text-xs font-bold px-2 py-1 rounded border border-green-500/20">מענה מהמאגר</span>`;
-
-            if(content) {
-                content.innerHTML = `
-                    <div class="flex items-center gap-2 mb-4">${badge}</div>
-                    <h2 class="text-2xl font-black mb-6 text-right">${item.title}</h2>
-                    <div class="space-y-4 mb-8 text-right">
-                        ${item.steps.map((step, i) => `
-                            <div class="flex gap-4 items-start flex-row-reverse">
-                                <span class="flex-shrink-0 w-8 h-8 bg-sky-500 text-black font-bold rounded-full flex items-center justify-center">${i + 1}</span>
-                                <p class="text-lg pt-1">${step}</p>
-                            </div>
-                        `).join('')}
+            content.innerHTML = `
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                    ${badge}
+                    <div class="flex gap-2">
+                        <button onclick="playAudio()" class="ai-action-btn">
+                            <span>🔊 השמע שלבים ✨</span>
+                        </button>
+                        <button onclick="simplifyAnswer()" class="ai-action-btn">
+                            <span>🪄 פשט הסבר ✨</span>
+                        </button>
                     </div>
-                    <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 mb-8 text-right">
-                        <p class="text-amber-400 text-sm">💡 <b>טיפ:</b> ${item.tip}</p>
-                    </div>
-                    
-                    <button id="copy-btn" onclick="copyAnswer()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg transition-all">
-                        📋 העתק תשובה ללוח
-                    </button>
-                `;
-            }
-            if(container) container.scrollIntoView({ behavior: 'smooth' });
+                </div>
+                <h2 id="ans-title" class="text-2xl font-black mb-6 text-right text-white">${item.title}</h2>
+                <div id="ans-steps" class="space-y-4 mb-8 text-right text-white">
+                    ${item.steps.map((step, i) => `<div class="flex gap-4 items-start flex-row-reverse"><span class="flex-shrink-0 w-8 h-8 bg-sky-500 text-black font-bold rounded-full flex items-center justify-center">${i + 1}</span><p class="text-lg pt-1">${step}</p></div>`).join('')}
+                </div>
+                <div id="ans-tip" class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 mb-8 text-right text-amber-400"><p class="text-sm">💡 <b>טיפ:</b> ${item.tip}</p></div>
+                <button id="copy-btn" onclick="copyAnswer()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg transition-all">📋 העתק תשובה</button>
+            `;
+            container.scrollIntoView({ behavior: 'smooth' });
         }
 
-        async function fetchWithRetry(url, options, retries = 5) {
+        // --- GEMINI API HELPERS ---
+        async function callGemini(payload, model = "gemini-2.5-flash-preview-09-2025") {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
             const delays = [1000, 2000, 4000, 8000, 16000];
-            for (let i = 0; i < retries; i++) {
+            for (let i = 0; i < 5; i++) {
                 try {
-                    const response = await fetch(url, options);
+                    const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                     if (response.ok) return await response.json();
                 } catch (e) {}
-                await new Promise(res => setTimeout(res, delays[i]));
+                await new Promise(r => setTimeout(r, delays[i]));
             }
-            throw new Error("Failed");
+            throw new Error("API Connection Error");
         }
 
+        // --- NEW FEATURE: TRIGGER AI ---
         async function triggerAI() {
             const query = document.getElementById('query-input').value;
             if (!query) return;
-
             const content = document.getElementById('answer-content');
             document.getElementById('answer-container').classList.remove('hidden');
-            content.innerHTML = `<div class="flex flex-col items-center py-10 gap-4"><div class="spinner"></div><p class="text-indigo-300 font-bold">ה-AI מנתח ומכין פתרון ממאגרי התמיכה...</p></div>`;
-
-            const prompt = `פתרון טכני לבעיה: ${query}. עבור מכשיר: ${state.deviceLabel} (${state.osLabel}). החזר JSON: {"title":"...","steps":["..."],"tip":"..."}`;
-
+            content.innerHTML = `<div class="flex flex-col items-center py-10 gap-4"><div class="spinner"></div><p class="text-indigo-300 font-bold">ה-AI מנתח ומכין פתרון...</p></div>`;
             try {
-                const result = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
-                        tools: [{ "google_search": {} }],
-                        generationConfig: { responseMimeType: "application/json" }
-                    }) 
-                });
-                
-                let text = result.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                // Robust JSON extraction
-                const match = text.match(/\{[\s\S]*\}/);
-                if (match) {
-                    showAnswer(JSON.parse(match[0]), true);
-                } else {
-                    throw new Error("Invalid JSON");
-                }
+                const payload = {
+                    contents: [{ parts: [{ text: `בעיה: ${query}. מכשיר: ${state.deviceLabel} (${state.osLabel}). החזר JSON: {"title":"...","steps":["..."],"tip":"..."}` }] }],
+                    tools: [{ "google_search": {} }],
+                    generationConfig: { 
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "OBJECT",
+                            properties: {
+                                title: { type: "STRING" },
+                                steps: { type: "ARRAY", items: { type: "STRING" } },
+                                tip: { type: "STRING" }
+                            }
+                        }
+                    }
+                };
+                const result = await callGemini(payload);
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                showAnswer(JSON.parse(text), true);
             } catch (err) {
-                content.innerHTML = `<div class="text-center py-8"><p class="text-red-400 font-bold">שגיאה בתקשורת עם ה-AI. נסה לנסח מחדש או לבדוק שוב בעוד רגע.</p><button onclick="triggerAI()" class="mt-4 text-sky-400 underline">נסה שוב</button></div>`;
+                content.innerHTML = `<div class="text-center py-8 text-red-400">שגיאה בחיבור ל-AI. נסה שוב.</div>`;
             }
+        }
+
+        // --- NEW FEATURE: SIMPLIFY ✨ ---
+        async function simplifyAnswer() {
+            if (!state.currentAnswer) return;
+            const content = document.getElementById('answer-content');
+            const originalContent = content.innerHTML;
+            content.innerHTML = `<div class="flex flex-col items-center py-10 gap-4"><div class="spinner"></div><p class="text-indigo-300 font-bold">מפשט את ההסבר עבור המבוגר... ✨</p></div>`;
+            
+            try {
+                const prompt = `פשט את ההסבר הבא עבור אדם מבוגר מאוד. השתמש בשפה חמה, מעודדת ובלי מונחים טכניים.
+                הסבר: ${JSON.stringify(state.currentAnswer)}
+                החזר JSON באותו מבנה בדיוק: {"title":"...","steps":["..."],"tip":"..."}`;
+                
+                const result = await callGemini({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json" } });
+                const parsed = JSON.parse(result.candidates[0].content.parts[0].text);
+                showAnswer(parsed, true);
+            } catch (err) {
+                content.innerHTML = originalContent;
+            }
+        }
+
+        // --- NEW FEATURE: VISUAL TROUBLESHOOTER ✨ ---
+        async function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const base64Data = e.target.result.split(',')[1];
+                const content = document.getElementById('answer-content');
+                document.getElementById('answer-container').classList.remove('hidden');
+                goScreen('search');
+                content.innerHTML = `<div class="flex flex-col items-center py-10 gap-4"><div class="spinner"></div><p class="text-indigo-300 font-bold">מנתח את התמונה ששלחת... ✨</p></div>`;
+                
+                try {
+                    const payload = {
+                        contents: [{
+                            parts: [
+                                { text: "נתח את התמונה של התקלה הטכנית במכשיר והצע פתרון שלב אחרי שלב למבוגר. החזר JSON: {\"title\":\"...\",\"steps\":[\"...\"],\"tip\":\"...\"}" },
+                                { inlineData: { mimeType: "image/png", data: base64Data } }
+                            ]
+                        }],
+                        generationConfig: { responseMimeType: "application/json" }
+                    };
+                    const result = await callGemini(payload);
+                    const parsed = JSON.parse(result.candidates[0].content.parts[0].text);
+                    showAnswer(parsed, true);
+                } catch (err) {
+                    content.innerHTML = `<div class="text-center py-8 text-red-400">לא הצלחנו לנתח את התמונה. נסה לתאר את הבעיה בטקסט.</div>`;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // --- NEW FEATURE: TTS ✨ ---
+        async function playAudio() {
+            if (!state.currentAnswer) return;
+            const textToSpeak = `הנה השלבים ל${state.currentAnswer.title}: ` + state.currentAnswer.steps.join(". ") + ". טיפ: " + state.currentAnswer.tip;
+            
+            try {
+                const payload = {
+                    contents: [{ parts: [{ text: `Say in a calm, helpful Hebrew voice: ${textToSpeak}` }] }],
+                    model: "gemini-2.5-flash-preview-tts",
+                    generationConfig: { 
+                        responseModalities: ["AUDIO"],
+                        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Aoede" } } }
+                    }
+                };
+                const result = await callGemini(payload, "gemini-2.5-flash-preview-tts");
+                const pcmData = result.candidates[0].content.parts[0].inlineData.data;
+                const audioBlob = pcmToWav(pcmData, 24000);
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                audio.play();
+            } catch (err) {
+                console.error("TTS Error", err);
+            }
+        }
+
+        function pcmToWav(base64Pcm, sampleRate) {
+            const pcmBuffer = Uint8Array.from(atob(base64Pcm), c => c.charCodeAt(0)).buffer;
+            const wavHeader = new ArrayBuffer(44);
+            const view = new DataView(wavHeader);
+            view.setUint32(0, 0x52494646, false); view.setUint32(4, 36 + pcmBuffer.byteLength, true);
+            view.setUint32(8, 0x57415645, false); view.setUint32(12, 0x666d7420, false);
+            view.setUint32(16, 16, true); view.setUint16(20, 1, true);
+            view.setUint16(22, 1, true); view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * 2, true); view.setUint16(32, 2, true);
+            view.setUint16(34, 16, true); view.setUint32(36, 0x64617461, false);
+            view.setUint32(40, pcmBuffer.byteLength, true);
+            return new Blob([wavHeader, pcmBuffer], { type: 'audio/wav' });
         }
 
         function copyAnswer() {
             const a = state.currentAnswer;
-            if (!a) return;
-            const text = `*פתרון עבור: ${a.title}*\n\n${a.steps.map((s, i) => `*${i + 1}.* ${s}`).join('\n')}\n\n💡 *טיפ:* ${a.tip}\n\n_נשלח מסיירת גימלאטק_`;
-            
+            const text = `*פתרון עבור: ${a.title}*\n\n${a.steps.map((s, i) => `*${i + 1}.* ${s}`).join('\n')}\n\n💡 *טיפ:* ${a.tip}`;
             const el = document.createElement('textarea');
-            el.value = text;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-
-            const btn = document.getElementById('copy-btn');
-            btn.innerHTML = "✅ התשובה הועתקה!";
-            btn.classList.replace('bg-indigo-600', 'bg-green-600');
-            setTimeout(() => { 
-                btn.innerHTML = "📋 העתק תשובה ללוח"; 
-                btn.classList.replace('bg-green-600', 'bg-indigo-600');
-            }, 2000);
+            el.value = text; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
+            const btn = document.getElementById('copy-btn'); btn.innerHTML = "✅ הועתק!";
+            setTimeout(() => { btn.innerHTML = "📋 העתק תשובה"; }, 2000);
         }
 
         function openSupportWa() {
