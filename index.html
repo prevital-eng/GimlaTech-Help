@@ -69,7 +69,7 @@
             outline: none;
         }
 
-        /* Fixed and Centered Footer Container */
+        /* Fixed and Perfectly Centered Footer Button */
         .footer-container {
             position: fixed;
             bottom: 20px;
@@ -79,7 +79,7 @@
             justify-content: center;
             padding: 0 20px;
             z-index: 100;
-            pointer-events: none; /* Allow clicks to pass through container except for the button */
+            pointer-events: none;
         }
 
         .whatsapp-btn {
@@ -90,11 +90,6 @@
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
             transition: transform 0.2s ease, background-color 0.2s;
             pointer-events: auto;
-        }
-
-        .whatsapp-btn:hover {
-            background-color: #1ebc57;
-            transform: scale(1.02);
         }
 
         .tag {
@@ -229,7 +224,7 @@
 
     </main>
 
-    <!-- Footer WhatsApp Support Button -->
+    <!-- Footer Support Button - Perfectly Centered -->
     <div class="footer-container">
         <button onclick="openSupportWa()" class="whatsapp-btn flex items-center justify-center gap-3 py-4 px-8 rounded-2xl font-bold text-lg">
             <span>פנייה לסיירת גימלאטק — 0505396068</span>
@@ -306,126 +301,4 @@
         function searchKB(q) {
             const resultsArea = document.getElementById('results-area');
             const answerContainer = document.getElementById('answer-container');
-            answerContainer.classList.add('hidden');
-            const filtered = KB.filter(item => item.dev.includes(state.os) && 
-                (item.title.toLowerCase().includes(q.toLowerCase()) || item.cat.toLowerCase().includes(q.toLowerCase())) && 
-                (!state.activeTag || item.cat === state.activeTag));
-            
-            resultsArea.innerHTML = filtered.map(item => `
-                <div onclick='showAnswer(${JSON.stringify(item)})' class="card p-5 rounded-2xl cursor-pointer flex justify-between items-center group">
-                    <div>
-                        <span class="text-xs text-sky-400 font-bold uppercase tracking-widest">${item.cat}</span>
-                        <h3 class="text-lg font-bold mt-1">${item.title}</h3>
-                    </div>
-                    <span class="text-gray-600 group-hover:text-white">◀</span>
-                </div>
-            `).join('');
-        }
-
-        function showAnswer(item, isAI = false) {
-            state.currentAnswer = item;
-            document.getElementById('results-area').innerHTML = '';
-            const container = document.getElementById('answer-container');
-            container.classList.remove('hidden');
-            
-            const badge = isAI ? 
-                `<span class="bg-indigo-500/20 text-indigo-400 text-xs font-bold px-2 py-1 rounded border border-indigo-500/20">🔍 חיפוש עמוק (AI)</span>` : 
-                `<span class="bg-green-500/20 text-green-400 text-xs font-bold px-2 py-1 rounded border border-green-500/20">מענה מהמאגר</span>`;
-
-            document.getElementById('answer-content').innerHTML = `
-                <div class="flex items-center gap-2 mb-4">${badge}</div>
-                <h2 class="text-2xl font-black mb-6">${item.title}</h2>
-                <div class="space-y-4 mb-8">
-                    ${item.steps.map((step, i) => `
-                        <div class="flex gap-4 items-start">
-                            <span class="flex-shrink-0 w-8 h-8 bg-sky-500 text-black font-bold rounded-full flex items-center justify-center">${i + 1}</span>
-                            <p class="text-lg pt-1">${step}</p>
-                        </div>
-                    `).join('')}
-                </div>
-                <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 mb-6"><p class="text-amber-400 text-sm">💡 <b>טיפ:</b> ${item.tip}</p></div>
-                
-                <button id="copy-btn" onclick="copyAnswer()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg transition-all">
-                    <span>📋 העתק תשובה (להדבקה בוואטסאפ)</span>
-                </button>
-            `;
-            container.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        async function fetchWithRetry(url, options, retries = 5, delay = 1000) {
-            for (let i = 0; i < retries; i++) {
-                try {
-                    const response = await fetch(url, options);
-                    if (response.ok) return await response.json();
-                } catch (e) {}
-                await new Promise(resolve => setTimeout(resolve, delay));
-                delay *= 2;
-            }
-            throw new Error("Failed");
-        }
-
-        async function triggerAI() {
-            const query = document.getElementById('query-input').value;
-            if (!query) return;
-
-            const answerContainer = document.getElementById('answer-container');
-            answerContainer.classList.remove('hidden');
-            document.getElementById('answer-content').innerHTML = `<div class="flex flex-col items-center py-10 gap-4"><div class="spinner"></div><p class="text-indigo-300 font-bold">מבצע חיפוש עמוק במאגרי התמיכה...</p></div>`;
-
-            const systemPrompt = `אתה מומחה תמיכה טכנית בכיר עבור "גימלאטק". החזר JSON בלבד: { "title": "כותרת", "steps": ["צעד 1"...], "tip": "טיפ" }`;
-
-            const payload = {
-                contents: [{ parts: [{ text: `איך ${query} ב-${state.osLabel} ${state.deviceLabel} support official` }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-                tools: [{ "google_search": {} }],
-                generationConfig: { 
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "OBJECT",
-                        properties: {
-                            title: { type: "STRING" },
-                            steps: { type: "ARRAY", items: { type: "STRING" } },
-                            tip: { type: "STRING" }
-                        },
-                        required: ["title", "steps", "tip"]
-                    }
-                }
-            };
-
-            try {
-                const result = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                showAnswer(JSON.parse(text), true);
-            } catch (err) {
-                document.getElementById('answer-content').innerHTML = `<p class="text-red-400 text-center py-10">שגיאה. נסה שוב.</p>`;
-            }
-        }
-
-        function copyAnswer() {
-            const a = state.currentAnswer;
-            if (!a) return;
-            const text = `*פתרון רשמי עבור: ${a.title}*\n\n${a.steps.map((s, i) => `*${i + 1}.* ${s}`).join('\n')}\n\n💡 *טיפ:* ${a.tip}\n\n_נשלח באמצעות GimlaTech AI Helper_`;
-            
-            const dummy = document.createElement("textarea");
-            document.body.appendChild(dummy);
-            dummy.value = text;
-            dummy.select();
-            document.execCommand("copy");
-            document.body.removeChild(dummy);
-
-            const btn = document.getElementById('copy-btn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = "✅ הועתק ללוח!";
-            btn.classList.replace('bg-indigo-600', 'bg-green-600');
-            setTimeout(() => { 
-                btn.innerHTML = originalText; 
-                btn.classList.replace('bg-green-600', 'bg-indigo-600');
-            }, 2000);
-        }
-
-        function openSupportWa() {
-            window.open(`https://wa.me/972505396068?text=${encodeURIComponent("היי, אני מתנדב בגימלאטק וזקוק לעזרה נוספת...")}`, '_blank');
-        }
-    </script>
-</body>
-</html>
+            answerContainer.classList.add('
