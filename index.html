@@ -264,12 +264,9 @@ function showAnswer(parsed, isLocal, query) {
                     </div>`).join('')}
             </div>
             ${parsed.tip ? `<div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 text-amber-300 text-sm mb-5">💡 <b>טיפ:</b> ${parsed.tip}</div>` : ''}
-            <div class="flex gap-2 flex-wrap">
+            <div class="flex gap-2">
                 <button onclick="copyAnswer()" id="copy-btn" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors text-sm">
                     📋 העתק
-                </button>
-                <button onclick="shareWa()" class="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors text-sm">
-                    💬 שלח בוואטסאפ
                 </button>
                 ${saveBtn}
             </div>
