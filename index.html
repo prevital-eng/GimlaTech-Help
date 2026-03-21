@@ -422,7 +422,6 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
           </div>
           <div id="ai-content"></div>
         </div>
-        <button class="btn-reset" onclick="resetAll()">🔄 בעיה חדשה</button>
       </div>
     </div>
 
@@ -897,7 +896,7 @@ function waShareBtns(title, steps, tip) {
     'onclick="navigator.clipboard.writeText(`' + safe + '`).then(function(){' +
     'this.innerText=\'✓ הועתק!\';var _=this;setTimeout(function(){_.innerText=\'📋 העתק תשובה\'},2000)' +
     '}.bind(this))">📋 העתק תשובה</button>';
-  return copyBtn + '<button class="wa-share-btn" style="width:100%;margin-top:8px" onclick="openPhoneModal()">' + icon + ' שלח תשובה בוואטסאפ</button>';
+  return copyBtn;
 }
 
 function openPhoneModal() {
