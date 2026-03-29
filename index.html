@@ -896,21 +896,20 @@ function waShareBtns(title, steps, tip) {
   var plainText = title + '\n\n';
   steps.forEach(function(s,i){ plainText += (i+1) + '. ' + s + '\n'; });
   if (tip) plainText += '\n' + tip;
-  var _copyBtn = document.createElement('button');
-  _copyBtn.style.cssText = 'width:100%;margin-top:14px;padding:12px;border-radius:14px;background:#1e293b;border:1.5px solid #334155;color:#94a3b8;font-size:13px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;';
-  _copyBtn.textContent = '📋 העתק תשובה';
-  _copyBtn.addEventListener('click', function(){
-    navigator.clipboard.writeText(plainText).then(function(){
-      _copyBtn.textContent = '✓ הועתק!';
-      setTimeout(function(){ _copyBtn.textContent = '📋 העתק תשובה'; }, 2000);
-    }).catch(function(){
-      _copyBtn.textContent = '⚠️ נכשל';
-      setTimeout(function(){ _copyBtn.textContent = '📋 העתק תשובה'; }, 2000);
+  var _cbId = 'cb_' + Math.random().toString(36).substr(2,6);
+  setTimeout(function(){
+    var _copyBtn = document.getElementById(_cbId);
+    if (_copyBtn) _copyBtn.addEventListener('click', function(){
+      navigator.clipboard.writeText(plainText).then(function(){
+        _copyBtn.textContent = '✓ הועתק!';
+        setTimeout(function(){ _copyBtn.textContent = '📋 העתק תשובה'; }, 2000);
+      }).catch(function(){
+        _copyBtn.textContent = '⚠️ נכשל';
+        setTimeout(function(){ _copyBtn.textContent = '📋 העתק תשובה'; }, 2000);
+      });
     });
-  });
-  var _wrap = document.createElement('div');
-  _wrap.appendChild(_copyBtn);
-  return _wrap.innerHTML;
+  }, 100);
+  return '<button id="'+_cbId+'" style="width:100%;margin-top:14px;padding:12px;border-radius:14px;background:#1e293b;border:1.5px solid #334155;color:#94a3b8;font-size:13px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;">📋 העתק תשובה</button>';
 }
 
 function openPhoneModal() {
