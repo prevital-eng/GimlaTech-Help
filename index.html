@@ -816,7 +816,7 @@ function callAI(question) {
     'שורה אחרונה מתחילה ב-💡: טיפ קצר\n' +
     'אל תשתמש ב-Markdown מורכב. ענה בקצרה.';
 
-  fetch('https://script.google.com/macros/s/AKfycbziw5JD4UTjz4idl45Xwf5EnUuB_NVnI0JUUibOd2XefAFn9kdISJVKkP46_ZirHeez-aCTkLMLtwWtDJ73fr6BcnUuCHxgM0DykAVJTsxu5E/exec' +
+  fetch('https://script.google.com/macros/s/AKfycbziw5JD4UTjz4idl45Xwf5EnUuB_NVnI0JUUibOd2XefAFn9kdISJVKkP46_ZirHeez/exec' +
     '?question=' + encodeURIComponent(question) +
     '&system='   + encodeURIComponent(systemPrompt))
   .then(function(r){ return r.json(); })
