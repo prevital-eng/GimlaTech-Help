@@ -39,7 +39,7 @@ body { font-family: 'Heebo', sans-serif; background: #bfdbee; color: #0c1f4a; mi
 
 /* ══ DESKTOP: תצוגה דו-עמודית ══ */
 .page-wrap {
-  display: flex; min-height: 100vh;
+  display: flex; min-height: 100vh; background: #bfdbee;
 }
 /* עמודה שמאל — לוגו + תיאור, רק בדסקטופ */
 .sidebar {
@@ -48,19 +48,19 @@ body { font-family: 'Heebo', sans-serif; background: #bfdbee; color: #0c1f4a; mi
 .app {
   width: 100%; max-width: 520px; min-height: 100vh;
   display: flex; flex-direction: column; position: relative;
-  margin: 0 auto;
+  margin: 0 auto; background: #bfdbee;
 }
 
 @media (min-width: 900px) {
-  body { background: #a8d4e8; }
-  .page-wrap { align-items: stretch; justify-content: center; gap: 0; }
+  body { background: #bfdbee; }
+  .page-wrap { align-items: stretch; justify-content: center; gap: 0; background: #bfdbee; }
 
   .sidebar {
     display: flex; flex-direction: column; justify-content: center;
     width: 340px; flex-shrink: 0;
     padding: 48px 40px;
-    background: linear-gradient(160deg, #a8d4e8 0%, #8ec9e0 100%);
-    border-left: 1px solid #7dd3fc;
+    background: #bfdbee;
+    border-left: none;
   }
   .sidebar-logo { font-size: 32px; font-weight: 900; margin-bottom: 8px; }
   .sidebar-logo span { color: #0284c7; }
