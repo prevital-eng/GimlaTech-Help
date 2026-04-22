@@ -23,19 +23,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0f172a;
-  --surface: #1e293b;
-  --surface2: #273549;
-  --accent: #38bdf8;
-  --accent2: #818cf8;
-  --success: #34d399;
-  --text: #f1f5f9;
-  --muted: #94a3b8;
-  --border: #334155;
+  --bg:      #bfdbee;
+  --surface: #cde8f5;
+  --surface2:#b8d9ec;
+  --accent:  #0284c7;
+  --accent2: #6366f1;
+  --success: #059669;
+  --text:    #0c1f4a;
+  --muted:   #1a3a6e;
+  --border:  #7dd3fc;
   --wa: #25d366;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+body { font-family: 'Heebo', sans-serif; background: #bfdbee; color: #0c1f4a; min-height: 100vh; }
 
 /* ══ DESKTOP: תצוגה דו-עמודית ══ */
 .page-wrap {
@@ -52,21 +52,21 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
 }
 
 @media (min-width: 900px) {
-  body { background: #070f1d; }
+  body { background: #a8d4e8; }
   .page-wrap { align-items: stretch; justify-content: center; gap: 0; }
 
   .sidebar {
     display: flex; flex-direction: column; justify-content: center;
     width: 340px; flex-shrink: 0;
     padding: 48px 40px;
-    background: linear-gradient(160deg, #0f1e35 0%, #0a1628 100%);
-    border-left: 1px solid #1e3a5f;
+    background: linear-gradient(160deg, #a8d4e8 0%, #8ec9e0 100%);
+    border-left: 1px solid #7dd3fc;
   }
   .sidebar-logo { font-size: 32px; font-weight: 900; margin-bottom: 8px; }
-  .sidebar-logo span { color: var(--accent); }
+  .sidebar-logo span { color: #0284c7; }
   .sidebar-tag {
     display: inline-block; background: rgba(56,189,248,0.12);
-    border: 1px solid rgba(56,189,248,0.3); color: var(--accent);
+    border: 1px solid rgba(56,189,248,0.3); color: #0284c7;
     font-size: 11px; font-weight: 700; padding: 4px 12px;
     border-radius: 20px; margin-bottom: 28px;
   }
@@ -76,7 +76,7 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
   .sidebar-step-num {
     width: 28px; height: 28px; border-radius: 50%;
     background: rgba(56,189,248,0.15); border: 1.5px solid rgba(56,189,248,0.4);
-    color: var(--accent); font-size: 12px; font-weight: 700;
+    color: #0284c7; font-size: 12px; font-weight: 700;
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
   .sidebar-step-text { font-size: 13px; color: #64748b; }
@@ -85,7 +85,7 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
     max-width: 480px; flex-shrink: 0;
     border-right: 1px solid #1e293b;
     border-left: 1px solid #1e293b;
-    background: var(--bg);
+    background: #bfdbee;
   }
   .wa-bar { left: auto; transform: none; right: auto; position: sticky; }
   .modal-box { border-radius: 16px; margin-bottom: 40px; }
@@ -95,18 +95,18 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
 /* ══ HEADER ══ */
 .header {
   padding: 20px 20px 16px;
-  background: linear-gradient(180deg, #0f172a 0%, transparent 100%);
+  background: linear-gradient(180deg, #bfdbee 0%, transparent 100%);
   position: sticky; top: 0; z-index: 10;
   backdrop-filter: blur(12px);
 }
 .logo-row { display: flex; align-items: center; gap: 10px; }
 .logo-icon { font-size: 26px; }
-.logo-text { font-size: 19px; font-weight: 900; letter-spacing: -0.5px; }
-.logo-text span { color: var(--accent); }
+.logo-text { font-size: 19px; font-weight: 900; letter-spacing: -0.5px; color: #0c2461; }
+.logo-text span { color: #0c2461; }
 .breadcrumb { display: flex; align-items: center; gap: 6px; margin-top: 10px; min-height: 22px; }
-.crumb { font-size: 12px; color: var(--muted); }
-.crumb.active { color: var(--accent); font-weight: 700; }
-.crumb-sep { color: var(--border); font-size: 12px; }
+.crumb { font-size: 12px; color: #1a3a6e; }
+.crumb.active { color: #0284c7; font-weight: 700; }
+.crumb-sep { color: #7dd3fc; font-size: 12px; }
 
 /* ══ BODY ══ */
 .body { flex: 1; padding: 4px 18px 90px; overflow-y: auto; }
@@ -116,11 +116,11 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
 
 /* ══ SCREEN 1 — בחירת מכשיר ══ */
 .screen-title { font-size: 22px; font-weight: 900; margin-bottom: 6px; }
-.screen-sub { font-size: 14px; color: var(--muted); margin-bottom: 22px; }
+.screen-sub { font-size: 14px; color: #1a3a6e; margin-bottom: 22px; }
 .device-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
 .device-card {
-  background: var(--surface);
-  border: 2px solid var(--border);
+  background: #cde8f5;
+  border: 2px solid #7dd3fc;
   border-radius: 18px;
   padding: 18px 10px;
   cursor: pointer;
@@ -128,55 +128,55 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
   transition: all 0.18s;
 }
 .device-card:hover, .device-card.sel {
-  border-color: var(--accent);
-  background: var(--surface2);
+  border-color: #0284c7;
+  background: #b8d9ec;
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(56,189,248,0.15);
 }
 .device-card .icon { font-size: 32px; margin-bottom: 8px; display: block; }
-.device-card .label { font-size: 13px; font-weight: 700; color: var(--text); }
+.device-card .label { font-size: 13px; font-weight: 700; color: #0c1f4a; }
 
 /* ══ SCREEN 2 — מערכת הפעלה ══ */
 .os-list { display: flex; flex-direction: column; gap: 9px; }
 .os-btn {
-  background: var(--surface);
-  border: 2px solid var(--border);
+  background: #cde8f5;
+  border: 2px solid #7dd3fc;
   border-radius: 14px;
   padding: 15px 18px;
   cursor: pointer;
   display: flex; align-items: center; gap: 14px;
-  transition: all 0.15s; color: var(--text); width: 100%;
+  transition: all 0.15s; color: #0c1f4a; width: 100%;
   text-align: right;
 }
 .os-btn:hover, .os-btn.sel {
-  border-color: var(--accent2);
-  background: var(--surface2);
+  border-color: #6366f1;
+  background: #b8d9ec;
   box-shadow: 0 4px 16px rgba(129,140,248,0.12);
 }
 .os-btn .os-icon { font-size: 24px; flex-shrink: 0; }
 .os-btn .os-label { font-size: 15px; font-weight: 700; }
-.os-btn .os-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.os-btn .os-desc { font-size: 12px; color: #1a3a6e; margin-top: 2px; }
 
 /* ══ SCREEN 3 — חיפוש ══ */
 .search-box {
-  background: var(--surface);
-  border: 2px solid var(--border);
+  background: #cde8f5;
+  border: 2px solid #7dd3fc;
   border-radius: 16px;
   display: flex; align-items: center; gap: 10px;
   padding: 4px 14px 4px 8px;
   margin-bottom: 14px;
   transition: border-color 0.2s;
 }
-.search-box:focus-within { border-color: var(--accent); }
+.search-box:focus-within { border-color: #0284c7; }
 .search-box input {
   flex: 1; background: none; border: none; outline: none;
   font-size: 14px; font-family: 'Heebo', sans-serif;
-  color: var(--text); padding: 10px 0;
+  color: #0c1f4a; padding: 10px 0;
   direction: rtl; min-width: 0;
 }
-.search-box input::placeholder { color: var(--muted); }
+.search-box input::placeholder { color: #1a3a6e; }
 .search-go {
-  background: var(--accent);
+  background: #0284c7;
   border: none; border-radius: 10px;
   width: 34px; height: 34px;
   display: flex; align-items: center; justify-content: center;
@@ -184,37 +184,37 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
   transition: background 0.15s;
 }
 .search-go:hover { background: #7dd3fc; }
-.search-go:disabled { background: var(--border); cursor: default; }
+.search-go:disabled { background: #7dd3fc; cursor: default; }
 
 /* תגי מסנן נושאים */
 .topics-row { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 16px; }
 .topic-chip {
   padding: 5px 13px; border-radius: 20px;
-  border: 1.5px solid var(--border);
-  background: var(--surface); color: var(--muted);
+  border: 1.5px solid #7dd3fc;
+  background: #cde8f5; color: #1a3a6e;
   font-size: 12px; font-weight: 700; cursor: pointer;
   transition: all 0.15s; white-space: nowrap;
 }
-.topic-chip:hover { border-color: var(--accent2); color: var(--accent2); }
-.topic-chip.active { background: var(--accent2); border-color: var(--accent2); color: white; }
+.topic-chip:hover { border-color: #6366f1; color: #6366f1; }
+.topic-chip.active { background: #6366f1; border-color: #6366f1; color: white; }
 
 /* תוצאות מאגר */
-.results-label { font-size: 12px; color: var(--muted); margin-bottom: 10px; font-weight: 700; }
+.results-label { font-size: 12px; color: #1a3a6e; margin-bottom: 10px; font-weight: 700; }
 .result-card {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
+  background: #cde8f5;
+  border: 1.5px solid #7dd3fc;
   border-radius: 14px; padding: 14px 16px;
   margin-bottom: 8px; cursor: pointer;
   transition: all 0.15s; text-align: right;
 }
-.result-card:hover { border-color: var(--accent2); background: var(--surface2); }
+.result-card:hover { border-color: #6366f1; background: #b8d9ec; }
 .result-card .r-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
-.result-card .r-meta { font-size: 12px; color: var(--muted); }
-.result-card mark { background: rgba(56,189,248,0.25); color: var(--accent); border-radius: 3px; padding: 0 2px; font-style: normal; }
+.result-card .r-meta { font-size: 12px; color: #1a3a6e; }
+.result-card mark { background: rgba(56,189,248,0.25); color: #0284c7; border-radius: 3px; padding: 0 2px; font-style: normal; }
 
 /* AI תשובה */
 .ai-box {
-  background: linear-gradient(135deg, #0c2340 0%, #1a1040 100%);
+  background: linear-gradient(135deg, #cde8f5 0%, #d5eaf7 100%);
   border: 1.5px solid rgba(129,140,248,0.4);
   border-radius: 16px; padding: 18px;
   margin-bottom: 14px; position: relative; overflow: hidden;
@@ -227,23 +227,23 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
   pointer-events: none;
 }
 .ai-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-.ai-badge { background: var(--accent2); color: white; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
-.ai-typing { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
-.dots span { display: inline-block; width: 6px; height: 6px; background: var(--accent2); border-radius: 50%; animation: bounce 1.2s infinite; margin: 0 2px; }
+.ai-badge { background: #6366f1; color: white; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+.ai-typing { display: flex; align-items: center; gap: 8px; color: #1a3a6e; font-size: 13px; }
+.dots span { display: inline-block; width: 6px; height: 6px; background: #6366f1; border-radius: 50%; animation: bounce 1.2s infinite; margin: 0 2px; }
 .dots span:nth-child(2) { animation-delay: 0.2s; }
 .dots span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-6px)} }
-.ai-content { font-size: 14px; line-height: 1.8; color: #cbd5e1; white-space: pre-wrap; }
-.ai-content strong { color: var(--text); }
+.ai-content { font-size: 14px; line-height: 1.8; color: #0c1f4a; white-space: pre-wrap; }
+.ai-content strong { color: #0c1f4a; }
 .ai-step { display: flex; gap: 12px; margin-bottom: 10px; align-items: flex-start; }
-.ai-step-num { background: var(--accent2); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
-.ai-step-text { font-size: 14px; color: #cbd5e1; line-height: 1.6; }
-.ai-tip { background: rgba(251,191,36,0.1); border-right: 3px solid #fbbf24; padding: 10px 12px; border-radius: 8px; font-size: 13px; color: #fde68a; margin-top: 12px; }
+.ai-step-num { background: #6366f1; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+.ai-step-text { font-size: 14px; color: #0c1f4a; line-height: 1.6; }
+.ai-tip { background: #ddf0fa; border-right: 3px solid #fbbf24; padding: 10px 12px; border-radius: 8px; font-size: 13px; color: #92400e; margin-top: 12px; }
 .ai-error { color: #fca5a5; font-size: 14px; }
 
 /* כפתורים */
 .btn-back {
-  background: none; border: none; color: var(--accent);
+  background: none; border: none; color: #0284c7;
   font-size: 13px; font-weight: 700; cursor: pointer;
   padding: 0; margin-bottom: 18px;
   font-family: 'Heebo', sans-serif;
@@ -252,37 +252,37 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
 .btn-back:hover { color: #7dd3fc; }
 .btn-reset {
   width: 100%; padding: 13px; border-radius: 14px;
-  background: var(--surface); border: 1.5px solid var(--border);
-  color: var(--muted); font-size: 14px; font-weight: 700;
+  background: #cde8f5; border: 1.5px solid #7dd3fc;
+  color: #1a3a6e; font-size: 14px; font-weight: 700;
   cursor: pointer; font-family: 'Heebo', sans-serif;
   transition: all 0.15s; margin-top: 8px;
 }
-.btn-reset:hover { border-color: var(--accent); color: var(--accent); }
+.btn-reset:hover { border-color: #0284c7; color: #0284c7; }
 
 /* Answer page */
 .answer-steps { margin-bottom: 12px; }
-.answer-tip { background: rgba(251,191,36,0.1); border-right: 3px solid #fbbf24; padding: 10px 12px; border-radius: 8px; font-size: 13px; color: #fde68a; margin-top: 4px; }
-.db-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(52,211,153,0.15); border: 1px solid rgba(52,211,153,0.4); color: var(--success); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 12px; }
+.answer-tip { background: #ddf0fa; border-right: 3px solid #fbbf24; padding: 10px 12px; border-radius: 8px; font-size: 13px; color: #92400e; margin-top: 4px; }
+.db-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(52,211,153,0.15); border: 1px solid rgba(52,211,153,0.4); color: #059669; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 12px; }
 
 .hidden { display: none !important; }
 
 /* ══ מודל הזנת מספר ══ */
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  position: fixed; inset: 0; background: rgba(14,58,106,0.5);
   display: flex; align-items: flex-end; justify-content: center;
   z-index: 100; backdrop-filter: blur(4px);
 }
 .modal-box {
-  background: var(--surface); border-radius: 20px 20px 0 0;
+  background: #cde8f5; border-radius: 20px 20px 0 0;
   padding: 24px 20px 32px; width: 100%; max-width: 480px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid #7dd3fc;
 }
 .modal-title { font-size: 17px; font-weight: 900; margin-bottom: 6px; }
-.modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+.modal-sub { font-size: 13px; color: #1a3a6e; margin-bottom: 18px; }
 .modal-input {
   width: 100%; padding: 13px 16px; border-radius: 12px;
-  border: 2px solid var(--border); background: var(--bg);
-  color: var(--text); font-size: 18px; font-family: 'Heebo', sans-serif;
+  border: 2px solid #7dd3fc; background: #bfdbee;
+  color: #0c1f4a; font-size: 18px; font-family: 'Heebo', sans-serif;
   outline: none; letter-spacing: 1px; text-align: center;
   margin-bottom: 8px;
 }
@@ -298,11 +298,11 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
 .modal-send:hover { background: #20b858; }
 .modal-cancel {
   width: 100%; padding: 11px; border-radius: 12px;
-  background: none; border: 1.5px solid var(--border);
-  color: var(--muted); font-size: 14px; cursor: pointer;
+  background: none; border: 1.5px solid #7dd3fc;
+  color: #1a3a6e; font-size: 14px; cursor: pointer;
   font-family: 'Heebo', sans-serif;
 }
-.modal-cancel:hover { border-color: var(--accent); color: var(--accent); }
+.modal-cancel:hover { border-color: #0284c7; color: #0284c7; }
 .share-row { display: flex; gap: 8px; margin-top: 14px; }
 .wa-share-btn {
   flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px;
@@ -313,8 +313,8 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
   text-decoration: none;
 }
 .wa-share-btn:hover { background: #22543a; }
-.wa-share-btn.personal { background: #1e293b; border-color: var(--accent2); color: var(--accent2); }
-.wa-share-btn.personal:hover { background: var(--surface2); }
+.wa-share-btn.personal { background: #1e293b; border-color: #6366f1; color: #6366f1; }
+.wa-share-btn.personal:hover { background: #b8d9ec; }
 </style>
 </head>
 <body>
@@ -322,7 +322,7 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
 
 <!-- סיידבר — מוצג רק בדסקטופ -->
 <div class="sidebar">
-  <div class="sidebar-logo">Gimla<span>Tech</span></div>
+  <div class="sidebar-logo">GimlaTech</div>
   <div class="sidebar-tag">🛠️ כלי עזר למתנדבים</div>
   <div class="sidebar-desc">פתרון בעיות טכנולוגיות מהיר ומדויק — בעזרת בינה מלאכותית ומאגר ידע מקצועי.</div>
   <div class="sidebar-steps">
@@ -330,10 +330,10 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
     <div class="sidebar-step"><div class="sidebar-step-num">2</div><div class="sidebar-step-text">בחרו מערכת הפעלה</div></div>
     <div class="sidebar-step"><div class="sidebar-step-num">3</div><div class="sidebar-step-text">תארו את הבעיה — קבלו פתרון</div></div>
   </div>
-  <div style="margin-top:auto;padding-top:40px;font-size:11px;color:#334155;line-height:1.7">
+  <div style="margin-top:auto;padding-top:40px;font-size:11px;color:#0c1f4a;line-height:1.7">
     © 2026 רויטל פלד / Revital Peled<br>
     All Rights Reserved<br>
-    <span style="color:#1e3a5f">נבנה בסיוע Claude AI</span>
+    <span style="color:#0c1f4a">נבנה בסיוע Claude AI</span>
   </div>
 </div>
 
@@ -343,10 +343,10 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
   <div class="header">
     <div class="logo-row">
       <img src="https://prevital-eng.github.io/GT-GDSH/logo.png" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #38bdf8" alt="GimlaTech" onerror="this.style.display='none'">
-      <span class="logo-text">Gimla<span>Tech</span></span>
-  <span onclick="document.getElementById('about-modal').classList.remove('hidden')" style="margin-right:auto;font-size:10px;color:#1e3a5f;font-weight:500;cursor:pointer">© Revital Peled 2026</span>
+      <span class="logo-text">GimlaTech</span>
+  <span onclick="document.getElementById('about-modal').classList.remove('hidden')" style="margin-right:auto;font-size:10px;color:#0c1f4a;font-weight:500;cursor:pointer">© Revital Peled 2026</span>
     </div>
-    <div style="font-size:13px;color:#ffffff;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);border-radius:8px;padding:5px 10px;margin-top:6px;text-align:center;font-weight:700;">
+    <div style="font-size:13px;color:#1e3a5f;background:#e0f2fe;border:1px solid #38bdf8;border-radius:8px;padding:5px 10px;margin-top:6px;text-align:center;font-weight:700;">
       🔒 אפליקציה זו מיועדת לשימוש מתנדבי גימלאטק בלבד
     </div>
     <div class="breadcrumb" id="breadcrumb"></div>
@@ -418,13 +418,13 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
   <!-- footer זכויות -->
   <div style="text-align:center;padding:10px 18px 6px;border-top:1px solid #1e293b">
     <button onclick="document.getElementById('about-modal').classList.remove('hidden')"
-      style="background:none;border:none;color:#334155;font-size:11px;cursor:pointer;font-family:'Heebo',sans-serif;">
+      style="background:none;border:none;color:#0c1f4a;font-size:11px;cursor:pointer;font-family:'Heebo',sans-serif;">
       © 2026 רויטל פלד &nbsp;·&nbsp; 🛡️ זכויות יוצרים
     </button>
   </div>
 
   <!-- פס הגנה גלוי -->
-  <div style="background:#0c1a2e;border-top:1px solid #1e3a5f;padding:8px 18px;text-align:center;font-size:11px;color:#38bdf8;letter-spacing:0.3px">
+  <div style="background:#bfdbee;border-top:1px solid #1e3a5f;padding:8px 18px;text-align:center;font-size:11px;color:#38bdf8;letter-spacing:0.3px">
     🛡️ כלי זה מוגן בזכויות יוצרים &nbsp;|&nbsp; © Revital Peled 2026 &nbsp;|&nbsp; All Rights Reserved
   </div>
 
@@ -433,15 +433,15 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
       <div class="modal-title">🛡️ GimlaTech AI Helper</div>
 
       <!-- פרטי יוצרת — דו לשוני -->
-      <div style="background:#0f172a;border-radius:12px;padding:14px;margin-bottom:14px">
+      <div style="background:#bfdbee;border-radius:12px;padding:14px;margin-bottom:14px">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px;line-height:2">
-          <div style="color:#94a3b8;border-left:1px solid #1e293b;padding-left:12px">
+          <div style="color:#1a3a6e;border-left:1px solid #a8d4e8;padding-left:12px">
             <strong style="color:#38bdf8">יוצרת:</strong> רויטל פלד<br>
             <strong style="color:#38bdf8">שנת יצירה:</strong> ינואר–מרץ 2026<br>
             <strong style="color:#38bdf8">נבנה בסיוע:</strong> Claude AI מבית Anthropic<br>
             <strong style="color:#38bdf8">מטרה:</strong> שיפור יכולתם של ותיקים להתמודד עם הסביבה הטכנולוגית — ומתאים לכל דורש
           </div>
-          <div style="color:#64748b;text-align:left;direction:ltr;font-size:11px;line-height:2">
+          <div style="color:#1a3a6e;text-align:left;direction:ltr;font-size:11px;line-height:2">
             <strong style="color:#818cf8">Creator:</strong> Revital Peled<br>
             <strong style="color:#818cf8">Year:</strong> Jan–Mar 2026<br>
             <strong style="color:#818cf8">Built with:</strong> Claude AI by Anthropic<br>
@@ -451,36 +451,36 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
       </div>
 
       <!-- תיעוד תהליך — דו לשוני -->
-      <div style="font-size:12px;font-weight:700;color:#475569;margin-bottom:8px;border-bottom:1px solid #1e293b;padding-bottom:6px">📋 תיעוד תהליך הפיתוח / Development Process</div>
+      <div style="font-size:12px;font-weight:700;color:#1a3a6e;margin-bottom:8px;border-bottom:1px solid #a8d4e8;padding-bottom:6px">📋 תיעוד תהליך הפיתוח / Development Process</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
-        <div style="font-size:11px;color:#64748b;line-height:1.9;border-left:1px solid #1e293b;padding-left:12px">
+        <div style="font-size:11px;color:#1a3a6e;line-height:1.9;border-left:1px solid #a8d4e8;padding-left:12px">
           פותח בשיחות עבודה עם Claude AI לאורך מספר שבועות.<br>
-          <strong style="color:#475569">שלב א׳:</strong> מאגר ידע — 50+ פתרונות<br>
-          <strong style="color:#475569">שלב ב׳:</strong> ארכיטקטורת 3 מסכים<br>
-          <strong style="color:#475569">שלב ג׳:</strong> שילוב AI חי<br>
-          <strong style="color:#475569">שלב ד׳:</strong> וואטסאפ, עיצוב, הגנת זכויות<br><br>
-          <span style="color:#334155">שיחות הפיתוח שמורות ב-Claude.ai כתיעוד מלא של תהליך היצירה.</span>
+          <strong style="color:#1a3a6e">שלב א׳:</strong> מאגר ידע — 50+ פתרונות<br>
+          <strong style="color:#1a3a6e">שלב ב׳:</strong> ארכיטקטורת 3 מסכים<br>
+          <strong style="color:#1a3a6e">שלב ג׳:</strong> שילוב AI חי<br>
+          <strong style="color:#1a3a6e">שלב ד׳:</strong> וואטסאפ, עיצוב, הגנת זכויות<br><br>
+          <span style="color:#0c1f4a">שיחות הפיתוח שמורות ב-Claude.ai כתיעוד מלא של תהליך היצירה.</span>
         </div>
-        <div style="font-size:11px;color:#475569;line-height:1.9;text-align:left;direction:ltr">
+        <div style="font-size:11px;color:#1a3a6e;line-height:1.9;text-align:left;direction:ltr">
           Built over several weeks with Claude AI.<br>
-          <strong style="color:#64748b">Phase 1:</strong> Knowledge base — 50+ solutions<br>
-          <strong style="color:#64748b">Phase 2:</strong> 3-screen architecture<br>
-          <strong style="color:#64748b">Phase 3:</strong> Live AI integration<br>
-          <strong style="color:#64748b">Phase 4:</strong> WhatsApp, design, copyright<br><br>
-          <span style="color:#334155">Full development history saved in Claude.ai as proof of ownership.</span>
+          <strong style="color:#1a3a6e">Phase 1:</strong> Knowledge base — 50+ solutions<br>
+          <strong style="color:#1a3a6e">Phase 2:</strong> 3-screen architecture<br>
+          <strong style="color:#1a3a6e">Phase 3:</strong> Live AI integration<br>
+          <strong style="color:#1a3a6e">Phase 4:</strong> WhatsApp, design, copyright<br><br>
+          <span style="color:#0c1f4a">Full development history saved in Claude.ai as proof of ownership.</span>
         </div>
       </div>
 
       <!-- זכויות — דו לשוני -->
-      <div style="font-size:12px;font-weight:700;color:#475569;margin-bottom:8px;border-bottom:1px solid #1e293b;padding-bottom:6px">⚖️ זכויות יוצרים / Copyright</div>
+      <div style="font-size:12px;font-weight:700;color:#1a3a6e;margin-bottom:8px;border-bottom:1px solid #a8d4e8;padding-bottom:6px">⚖️ זכויות יוצרים / Copyright</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-        <div style="font-size:11px;color:#94a3b8;line-height:1.9;border-left:1px solid #1e293b;padding-left:12px">
+        <div style="font-size:11px;color:#1a3a6e;line-height:1.9;border-left:1px solid #a8d4e8;padding-left:12px">
           הרעיון, הלוגיקה והעיצוב שייכים לרויטל פלד.<br>
           שימוש ב-AI אינו מעביר בעלות.<br>
           <span style="color:#fca5a5">✋ אין למכור או לטעון לבעלות.</span><br>
           <span style="color:#fca5a5">✋ שיתוף עם שמירת שם היוצרת בלבד.</span>
         </div>
-        <div style="font-size:11px;color:#64748b;line-height:1.9;text-align:left;direction:ltr">
+        <div style="font-size:11px;color:#1a3a6e;line-height:1.9;text-align:left;direction:ltr">
           Concept, logic & design belong to Revital Peled.<br>
           AI assistance does not transfer ownership.<br>
           <span style="color:#fca5a5">✋ Do not sell or claim ownership.</span><br>
@@ -488,7 +488,7 @@ body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--tex
         </div>
       </div>
 
-      <div style="text-align:center;font-size:11px;color:#334155;margin-bottom:14px">
+      <div style="text-align:center;font-size:11px;color:#0c1f4a;margin-bottom:14px">
         © 2026 Revital Peled · All Rights Reserved
       </div>
 
@@ -700,7 +700,7 @@ function renderDBResults(matches, q, customLabel) {
     if (q) {
       area.innerHTML = '';
     } else {
-      area.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:12px 0">לא נמצאו תוצאות</div>';
+      area.innerHTML = '<div style="color:#1a3a6e;font-size:13px;text-align:center;padding:12px 0">לא נמצאו תוצאות</div>';
     }
     return;
   }
@@ -818,7 +818,7 @@ function renderAIResponse(text, question) {
     }
   });
 
-  if (title) html += '<div style="font-size:16px;font-weight:700;margin-bottom:14px;color:var(--text)">'+escH(title)+'</div>';
+  if (title) html += '<div style="font-size:16px;font-weight:700;margin-bottom:14px;color:#0c1f4a">'+escH(title)+'</div>';
   if (steps.length) {
     html += '<div class="answer-steps">';
     steps.forEach(function(s, i) {
@@ -860,7 +860,7 @@ function waShareBtns(title, steps, tip) {
       });
     });
   }, 100);
-  return '<button id="'+_cbId+'" style="width:100%;margin-top:14px;padding:12px;border-radius:14px;background:#1e293b;border:1.5px solid #334155;color:#94a3b8;font-size:13px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;">📋 העתק תשובה</button>';
+  return '<button id="'+_cbId+'" style="width:100%;margin-top:14px;padding:12px;border-radius:14px;background:#1e293b;border:1.5px solid #334155;color:#1a3a6e;font-size:13px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;">📋 העתק תשובה</button>';
 }
 
 function resetAll() {
