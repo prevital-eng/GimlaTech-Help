@@ -9,7 +9,7 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>מחשבים וטלפונים | GimlaTech</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -19,8 +19,9 @@ body {
   background: #bfdbee;
   color: #0c1f4a;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  font-size: 17px;
+  
 }
 .header {
   padding: 10px 14px 8px;
@@ -96,10 +97,13 @@ body {
   font-family: 'Heebo', sans-serif;
 }
 .input-area {
-  position: sticky; bottom: 0;
   background: #bfdbee;
   border-top: 1px solid #7dd3fc;
-  padding: 8px 14px 10px;
+  padding: 8px 14px 4px;
+}
+.footer-rights {
+  text-align: center; font-size: 10px; color: #1a3a6e;
+  padding: 2px 0 0; opacity: 0.7;
 }
 .input-row {
   display: flex; align-items: flex-end; gap: 6px;
@@ -151,11 +155,7 @@ body {
 .chip:hover  { border-color: #0284c7; background: #b8d9ec; }
 .chip.sel    { background: #0284c7; border-color: #0284c7; color: white; }
 .chips-label { font-size: 12px; color: #1a3a6e; margin-bottom: 4px; font-weight: 700; }
-.footer-bar {
-  background: #a8d4e8; border-top: 1px solid #7dd3fc;
-  padding: 6px 14px; text-align: center;
-  font-size: 11px; color: #0c1f4a;
-}
+
 .hidden { display: none !important; }
 </style>
 </head>
@@ -180,20 +180,6 @@ body {
 
 <div class="chat-wrap" id="chat-wrap">
   <div class="bubble bot">שלום! אני כאן לעזור עם בעיות במחשב, טלפון וציוד טכנולוגי 💻📱<br><br>ספרו לי: <strong>מה המכשיר ומה הבעיה?</strong><br>(לדוגמה: "מחשב Windows לא מתחבר לאינטרנט")</div>
-  <!-- בחירת מכשיר — נעלמת כשמקלידים -->
-  <div id="device-chips-wrap">
-    <div class="chips-label">או בחרו סוג מכשיר:</div>
-    <div class="chips-area">
-      <button class="chip" id="chip-pc"    onclick="selectDevice('pc','💻','מחשב')">💻 מחשב</button>
-      <button class="chip" id="chip-phone" onclick="selectDevice('phone','📱','טלפון')">📱 טלפון</button>
-      <button class="chip" id="chip-extra" onclick="selectDevice('extra','🖨️','ציוד היקפי')">🖨️ ציוד היקפי</button>
-    </div>
-  </div>
-  <!-- בחירת מערכת הפעלה — מופיעה אחרי בחירת מכשיר -->
-  <div id="os-chips-wrap" class="hidden">
-    <div class="chips-label" id="os-chips-label">בחרו מערכת הפעלה:</div>
-    <div class="chips-area" id="os-chips"></div>
-  </div>
 </div>
 
 <div class="input-area">
@@ -207,11 +193,23 @@ body {
       <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="דיבור לטקסט">🎤</button>
     </div>
   </div>
+  <!-- בחירת מכשיר -->
+  <div id="device-chips-wrap">
+    <div class="chips-label">או בחרו סוג מכשיר:</div>
+    <div class="chips-area">
+      <button class="chip" id="chip-pc"    onclick="selectDevice('pc','💻','מחשב')">💻 מחשב</button>
+      <button class="chip" id="chip-phone" onclick="selectDevice('phone','📱','טלפון')">📱 טלפון</button>
+      <button class="chip" id="chip-extra" onclick="selectDevice('extra','🖨️','ציוד היקפי')">🖨️ ציוד היקפי</button>
+    </div>
+  </div>
+  <!-- בחירת מערכת הפעלה -->
+  <div id="os-chips-wrap" class="hidden">
+    <div class="chips-label" id="os-chips-label">בחרו מערכת הפעלה:</div>
+    <div class="chips-area" id="os-chips"></div>
+  </div>
+  <div class="footer-rights">© Revital Peled 2026 | נבנה בסיוע Claude AI</div>
 </div>
 
-<div class="footer-bar">
-  🛡️ © Revital Peled 2026 | All Rights Reserved | נבנה בסיוע Claude AI
-</div>
 
 <div style="position:fixed;inset:0;background:rgba(14,58,106,0.5);display:flex;align-items:flex-end;justify-content:center;z-index:100" class="hidden" id="about-modal" onclick="if(event.target===this)this.classList.add('hidden')">
   <div style="background:#cde8f5;border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;border-top:1px solid #7dd3fc">
